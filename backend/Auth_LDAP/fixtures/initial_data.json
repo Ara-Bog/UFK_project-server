@@ -1,0 +1,572 @@
+[
+  {
+    "model": "Auth_LDAP.Jobs",
+    "pk": 1,
+    "fields": {
+      "name": "Руководитель",
+      "sortBy": 1,
+      "unique": "руководитель"
+    }
+  },
+  {
+    "model": "Auth_LDAP.Jobs",
+    "pk": 2,
+    "fields": {
+      "name": "Заместитель руководителя",
+      "sortBy": 2,
+      "unique": "заместительруководителя"
+    }
+  },
+  {
+    "model": "Auth_LDAP.Jobs",
+    "pk": 3,
+    "fields": {
+      "name": "Заместитель руководителя - главный бухгалтер",
+      "sortBy": 3,
+      "unique": "заместительруководителяглавныйбухгалтер"
+    }
+  },
+  {
+    "model": "Auth_LDAP.Jobs",
+    "pk": 4,
+    "fields": {
+      "name": "ВРИО Заместителя руководителя",
+      "sortBy": 4,
+      "unique": "вриозаместителяруководителя"
+    }
+  },
+  {
+    "model": "Auth_LDAP.Jobs",
+    "pk": 5,
+    "fields": {
+      "name": "Помощник руководителя",
+      "sortBy": 5,
+      "unique": "помощникруководителя"
+    }
+  },
+  {
+    "model": "Auth_LDAP.Jobs",
+    "pk": 6,
+    "fields": {
+      "name": "Начальник отдела",
+      "sortBy": 6,
+      "unique": "начальникотдела"
+    }
+  },
+  {
+    "model": "Auth_LDAP.Jobs",
+    "pk": 7,
+    "fields": {
+      "name": "Заместитель начальника отдела",
+      "sortBy": 7,
+      "unique": "заместительначальникаотдела"
+    }
+  },
+  {
+    "model": "Auth_LDAP.Jobs",
+    "pk": 8,
+    "fields": {
+      "name": "Заместитель начальника",
+      "sortBy": 8,
+      "unique": "заместительначальника"
+    }
+  },
+  {
+    "model": "Auth_LDAP.Jobs",
+    "pk": 9,
+    "fields": {
+      "name": "ВРИО Начальника отдела",
+      "sortBy": 9,
+      "unique": "врионачальникаотдела"
+    }
+  },
+  {
+    "model": "Auth_LDAP.Jobs",
+    "pk": 10,
+    "fields": {
+      "name": "Главный казначей",
+      "sortBy": 10,
+      "unique": "главныйказначей"
+    }
+  },
+  {
+    "model": "Auth_LDAP.Jobs",
+    "pk": 11,
+    "fields": {
+      "name": "Старший казначей",
+      "sortBy": 11,
+      "unique": "старшийказначей"
+    }
+  },
+  {
+    "model": "Auth_LDAP.Jobs",
+    "pk": 12,
+    "fields": {
+      "name": "Казначей",
+      "sortBy": 12,
+      "unique": "казначей"
+    }
+  },
+  {
+    "model": "Auth_LDAP.Jobs",
+    "pk": 13,
+    "fields": {
+      "name": "Главный специалист - эксперт",
+      "sortBy": 13,
+      "unique": "главныйспециалистэксперт"
+    }
+  },
+  {
+    "model": "Auth_LDAP.Jobs",
+    "pk": 14,
+    "fields": {
+      "name": "Ведущий специалист - эксперт",
+      "sortBy": 14,
+      "unique": "ведущийспециалистэксперт"
+    }
+  },
+  {
+    "model": "Auth_LDAP.Jobs",
+    "pk": 15,
+    "fields": {
+      "name": "Специалист - эксперт",
+      "sortBy": 15,
+      "unique": "специалистэксперт"
+    }
+  },
+  {
+    "model": "Auth_LDAP.Jobs",
+    "pk": 16,
+    "fields": {
+      "name": "Старший специалист 3 разряда",
+      "sortBy": 16,
+      "unique": "старшийспециалист3разряда"
+    }
+  },
+  {
+    "model": "Auth_LDAP.Jobs",
+    "pk": 17,
+    "fields": {
+      "name": "Специалист 1 разряда",
+      "sortBy": 17,
+      "unique": "специалист1разряда"
+    }
+  },
+  {
+    "model": "Auth_LDAP.Jobs",
+    "pk": 18,
+    "fields": {
+      "name": "Специалист 2 разряда",
+      "sortBy": 18,
+      "unique": "специалист2разряда"
+    }
+  },
+  {
+    "model": "Auth_LDAP.Jobs",
+    "pk": 19,
+    "fields": {
+      "name": "Специалист 3 разряда",
+      "sortBy": 19,
+      "unique": "специалист3разряда"
+    }
+  },
+  {
+    "model": "Auth_LDAP.Jobs",
+    "pk": 20,
+    "fields": {
+      "name": "Эксперт",
+      "sortBy": 20,
+      "unique": "эксперт"
+    }
+  },
+  {
+    "model": "Auth_LDAP.Departments",
+    "pk": 1,
+    "fields": {
+      "name": "Руководство",
+      "sortBy": 1,
+      "unique": "руководство",
+      "showName": "Руководство"
+    }
+  },
+  {
+    "model": "Auth_LDAP.Departments",
+    "pk": 2,
+    "fields": {
+      "name": "Помощник руководителя",
+      "sortBy": 2,
+      "unique": "помощникруководителя",
+      "showName": "Руководство"
+    }
+  },
+  {
+    "model": "Auth_LDAP.Departments",
+    "pk": 3,
+    "fields": {
+      "name": "Заместители руководителя",
+      "sortBy": 3,
+      "unique": "заместителируководителя",
+      "showName": "Руководство"
+    }
+  },
+  {
+    "model": "Auth_LDAP.Departments",
+    "pk": 4,
+    "fields": {
+      "name": "Отдел доходов",
+      "sortBy": 4,
+      "unique": "отделдоходов",
+      "showName": "Отдел доходов"
+    }
+  },
+  {
+    "model": "Auth_LDAP.Departments",
+    "pk": 5,
+    "fields": {
+      "name": "Операционный отдел",
+      "sortBy": 5,
+      "unique": "операционныйотдел",
+      "showName": "Операционный отдел"
+    }
+  },
+  {
+    "model": "Auth_LDAP.Departments",
+    "pk": 6,
+    "fields": {
+      "name": "Отдел расходов",
+      "sortBy": 6,
+      "unique": "отделрасходов",
+      "showName": "Отдел расходов"
+    }
+  },
+  {
+    "model": "Auth_LDAP.Departments",
+    "pk": 7,
+    "fields": {
+      "name": "Отдел ведения федеральных реестров",
+      "sortBy": 7,
+      "unique": "отделведенияфедеральныхреестров",
+      "showName": "Отдел ведения федеральных реестров"
+    }
+  },
+  {
+    "model": "Auth_LDAP.Departments",
+    "pk": 8,
+    "fields": {
+      "name": "Отдел кассового обслуживания исполнения бюджетов",
+      "sortBy": 8,
+      "unique": "отделкассовогообслуживанияисполнениябюджетов",
+      "showName": "Отдел кассового обслуживания исполнения бюджетов"
+    }
+  },
+  {
+    "model": "Auth_LDAP.Departments",
+    "pk": 9,
+    "fields": {
+      "name": "Отдел казначейского сопровождения",
+      "sortBy": 9,
+      "unique": "отделказначейскогосопровождения",
+      "showName": "Отдел казначейского сопровождения"
+    }
+  },
+  {
+    "model": "Auth_LDAP.Departments",
+    "pk": 10,
+    "fields": {
+      "name": "Отдел бюджетного учета и отчетности по операциям бюджетов",
+      "sortBy": 10,
+      "unique": "отделбюджетногоучетаиотчетностипооперациямбюджетов",
+      "showName": "Отдел бюджетного учета и отчетности по операциям бюджетов"
+    }
+  },
+  {
+    "model": "Auth_LDAP.Departments",
+    "pk": 11,
+    "fields": {
+      "name": "Отдел внутреннего контроля и аудита",
+      "sortBy": 11,
+      "unique": "отделвнутреннегоконтроляиаудита",
+      "showName": "Отдел внутреннего контроля и аудита"
+    }
+  },
+  {
+    "model": "Auth_LDAP.Departments",
+    "pk": 12,
+    "fields": {
+      "name": "Административно-финансовый отдел",
+      "sortBy": 12,
+      "unique": "административнофинансовыйотдел",
+      "showName": "Административно-финансовый отдел"
+    }
+  },
+  {
+    "model": "Auth_LDAP.Departments",
+    "pk": 13,
+    "fields": {
+      "name": "Отдел информационных систем",
+      "sortBy": 13,
+      "unique": "отделинформационныхсистем",
+      "showName": "Отдел информационных систем"
+    }
+  },
+  {
+    "model": "Auth_LDAP.Departments",
+    "pk": 14,
+    "fields": {
+      "name": "Отдел технологического обеспечения",
+      "sortBy": 14,
+      "unique": "отделтехнологическогообеспечения",
+      "showName": "Отдел технологического обеспечения"
+    }
+  },
+  {
+    "model": "Auth_LDAP.Departments",
+    "pk": 15,
+    "fields": {
+      "name": "Отдел режима секретности и безопасности информации",
+      "sortBy": 15,
+      "unique": "отделрежимасекретностиибезопасностиинформации",
+      "showName": "Отдел режима секретности и безопасности информации"
+    }
+  },
+  {
+    "model": "Auth_LDAP.Departments",
+    "pk": 16,
+    "fields": {
+      "name": "Отдел государственной гражданской службы и кадров",
+      "sortBy": 16,
+      "unique": "отделгосударственнойгражданскойслужбыикадров",
+      "showName": "Отдел государственной гражданской службы и кадров"
+    }
+  },
+  {
+    "model": "Auth_LDAP.Departments",
+    "pk": 17,
+    "fields": {
+      "name": "Отдел функционирования контрактной системы",
+      "sortBy": 17,
+      "unique": "отделфункционированияконтрактнойсистемы",
+      "showName": "Отдел функционирования контрактной системы"
+    }
+  },
+  {
+    "model": "Auth_LDAP.Departments",
+    "pk": 18,
+    "fields": {
+      "name": "Отдел мобилизационной подготовки и гражданской обороны",
+      "sortBy": 18,
+      "unique": "отделмобилизационнойподготовкиигражданскойобороны",
+      "showName": "Отдел мобилизационной подготовки и гражданской обороны"
+    }
+  },
+  {
+    "model": "Auth_LDAP.Departments",
+    "pk": 19,
+    "fields": {
+      "name": "Отдел по централизованному начислению заработной платы и иных вы",
+      "sortBy": 19,
+      "unique": "отделпоцентрализованномуначислениюзаработнойплатыииныхвы",
+      "showName": "Отдел по централизованному начислению заработной платы и иных выплат"
+    }
+  },
+  {
+    "model": "Auth_LDAP.Departments",
+    "pk": 20,
+    "fields": {
+      "name": "Отдел централизованной бухгалтерии",
+      "sortBy": 20,
+      "unique": "отделцентрализованнойбухгалтерии",
+      "showName": "Отдел централизованной бухгалтерии"
+    }
+  },
+  {
+    "model": "Auth_LDAP.Departments",
+    "pk": 21,
+    "fields": {
+      "name": "Отдел № 1",
+      "sortBy": 21,
+      "unique": "отдел1",
+      "showName": "Отдел № 1"
+    }
+  },
+  {
+    "model": "Auth_LDAP.Departments",
+    "pk": 22,
+    "fields": {
+      "name": "Отдел № 4",
+      "sortBy": 22,
+      "unique": "отдел4",
+      "showName": "Отдел № 4"
+    }
+  },
+  {
+    "model": "Auth_LDAP.Departments",
+    "pk": 23,
+    "fields": {
+      "name": "Отдел № 5",
+      "sortBy": 23,
+      "unique": "отдел5",
+      "showName": "Отдел № 5"
+    }
+  },
+  {
+    "model": "Auth_LDAP.Departments",
+    "pk": 24,
+    "fields": {
+      "name": "Отдел № 8",
+      "sortBy": 24,
+      "unique": "отдел8",
+      "showName": "Отдел № 8"
+    }
+  },
+  {
+    "model": "Auth_LDAP.Departments",
+    "pk": 25,
+    "fields": {
+      "name": "Отдел № 12",
+      "sortBy": 25,
+      "unique": "отдел12",
+      "showName": "Отдел № 12"
+    }
+  },
+  {
+    "model": "Auth_LDAP.Departments",
+    "pk": 26,
+    "fields": {
+      "name": "Отдел № 15",
+      "sortBy": 26,
+      "unique": "отдел15",
+      "showName": "Отдел № 15"
+    }
+  },
+  {
+    "model": "Auth_LDAP.Departments",
+    "pk": 27,
+    "fields": {
+      "name": "Отдел № 19",
+      "sortBy": 27,
+      "unique": "отдел19",
+      "showName": "Отдел № 19"
+    }
+  },
+  {
+    "model": "Auth_LDAP.Departments",
+    "pk": 28,
+    "fields": {
+      "name": "Отдел № 20",
+      "sortBy": 28,
+      "unique": "отдел20",
+      "showName": "Отдел № 20"
+    }
+  },
+  {
+    "model": "Auth_LDAP.Departments",
+    "pk": 29,
+    "fields": {
+      "name": "Отдел № 22",
+      "sortBy": 29,
+      "unique": "отдел22",
+      "showName": "Отдел № 22"
+    }
+  },
+  {
+    "model": "Auth_LDAP.Departments",
+    "pk": 30,
+    "fields": {
+      "name": "Отдел № 23",
+      "sortBy": 30,
+      "unique": "отдел23",
+      "showName": "Отдел № 23"
+    }
+  },
+  {
+    "model": "Auth_LDAP.Departments",
+    "pk": 31,
+    "fields": {
+      "name": "Отдел № 28",
+      "sortBy": 31,
+      "unique": "отдел28",
+      "showName": "Отдел № 28"
+    }
+  },
+  {
+    "model": "Auth_LDAP.Departments",
+    "pk": 32,
+    "fields": {
+      "name": "Отдел № 29",
+      "sortBy": 32,
+      "unique": "отдел29",
+      "showName": "Отдел № 29"
+    }
+  },
+  {
+    "model": "Auth_LDAP.Departments",
+    "pk": 33,
+    "fields": {
+      "name": "Отдел № 34",
+      "sortBy": 33,
+      "unique": "отдел34",
+      "showName": "Отдел № 34"
+    }
+  },
+  {
+    "model": "Auth_LDAP.Departments",
+    "pk": 34,
+    "fields": {
+      "name": "Отдел № 35",
+      "sortBy": 34,
+      "unique": "отдел35",
+      "showName": "Отдел № 35"
+    }
+  },
+  {
+    "model": "Auth_LDAP.Departments",
+    "pk": 35,
+    "fields": {
+      "name": "Отдел № 36",
+      "sortBy": 35,
+      "unique": "отдел36",
+      "showName": "Отдел № 36"
+    }
+  },
+  {
+    "model": "Auth_LDAP.Departments",
+    "pk": 36,
+    "fields": {
+      "name": "Отдел № 38",
+      "sortBy": 36,
+      "unique": "отдел38",
+      "showName": "Отдел № 38"
+    }
+  },
+  {
+    "model": "Auth_LDAP.Departments",
+    "pk": 37,
+    "fields": {
+      "name": "Отдел № 41",
+      "sortBy": 37,
+      "unique": "отдел41",
+      "showName": "Отдел № 41"
+    }
+  },
+  {
+    "model": "Auth_LDAP.Departments",
+    "pk": 38,
+    "fields": {
+      "name": "Отдел № 42",
+      "sortBy": 38,
+      "unique": "отдел42",
+      "showName": "Отдел № 42"
+    }
+  },
+  {
+    "model": "Auth_LDAP.Departments",
+    "pk": 39,
+    "fields": {
+      "name": "Отдел № 43",
+      "sortBy": 39,
+      "unique": "отдел43",
+      "showName": "Отдел № 43"
+    }
+  }
+]
