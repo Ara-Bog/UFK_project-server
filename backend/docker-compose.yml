@@ -1,0 +1,21 @@
+version: "3"
+name: ldap_auth
+
+services:
+  ldap_auth:
+    container_name: server-ldap_auth
+    restart: always
+    build: .
+    image: ldap_auth-server
+    command: sh -c "
+      python manage.py makemigrations &&
+      python manage.py makemigrations Auth_LDAP &&
+      python manage.py migrate &&
+      python manage.py loaddata initial_data.json &&
+      python manage.py sync_ldap_users &
+      python manage.py runserver 0.0.0.0:8000"
+    volumes:
+      - ./ldap_auth-server:/ldap_auth-server
+    ports:
+      - "8000:8000"
+    network_mode: "host"
