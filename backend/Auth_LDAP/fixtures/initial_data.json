@@ -1,5 +1,69 @@
 [
   {
+    "model": "Auth_LDAP.StatusesVacations",
+    "pk": 1,
+    "fields": {
+      "name": "Заполнение данных отпуска",
+      "limit_day": 30
+    }
+  },
+  {
+    "model": "Auth_LDAP.StatusesVacations",
+    "pk": 2,
+    "fields": {
+      "name": "Документы сформированы",
+      "limit_day": 30
+    }
+  },
+  {
+    "model": "Auth_LDAP.StatusesVacations",
+    "pk": 3,
+    "fields": {
+      "name": "Уведомление подписано сотрудником",
+      "limit_day": 30
+    }
+  },
+  {
+    "model": "Auth_LDAP.StatusesVacations",
+    "pk": 4,
+    "fields": {
+      "name": "Приказ подписан",
+      "limit_day": 16
+    }
+  },
+  {
+    "model": "Auth_LDAP.StatusesVacations",
+    "pk": 5,
+    "fields": {
+      "name": "Приказ утвержден в ЕИСУКС",
+      "limit_day": 16
+    }
+  },
+  {
+    "model": "Auth_LDAP.StatusesVacations",
+    "pk": 6,
+    "fields": {
+      "name": "Скан приказа загружен в 1С",
+      "limit_day": 16
+    }
+  },
+  {
+    "model": "Auth_LDAP.StatusesVacations",
+    "pk": 7,
+    "fields": {
+      "name": "Приказ направлен в ЦОКР",
+      "limit_day": 13
+    }
+  },
+  {
+    "model": "Auth_LDAP.StatusesVacations",
+    "pk": 8,
+    "fields": {
+      "name": "Лист ознакомления подписан сотрудником",
+      "limit_day": 0
+    }
+  },
+  {
     "model": "Auth_LDAP.Jobs",
     "pk": 1,
     "fields": {
@@ -354,7 +418,7 @@
     "pk": 18,
     "fields": {
       "name": "Отдел мобилизационной подготовки и гражданской обороны",
-      "sortBy": 18,
+      "sortBy": 19,
       "unique": "отделмобилизационнойподготовкиигражданскойобороны",
       "showName": "Отдел мобилизационной подготовки и гражданской обороны"
     }
@@ -363,9 +427,9 @@
     "model": "Auth_LDAP.Departments",
     "pk": 19,
     "fields": {
-      "name": "Отдел по централизованному начислению заработной платы и иных вы",
-      "sortBy": 19,
-      "unique": "отделпоцентрализованномуначислениюзаработнойплатыииныхвы",
+      "name": "Отдел по централизованному начислению заработной платы и иных выплат",
+      "sortBy": 20,
+      "unique": "отделпоцентрализованномуначислениюзаработнойплатыииныхвыплат",
       "showName": "Отдел по централизованному начислению заработной платы и иных выплат"
     }
   },
@@ -374,7 +438,7 @@
     "pk": 20,
     "fields": {
       "name": "Отдел централизованной бухгалтерии",
-      "sortBy": 20,
+      "sortBy": 21,
       "unique": "отделцентрализованнойбухгалтерии",
       "showName": "Отдел централизованной бухгалтерии"
     }
@@ -384,7 +448,7 @@
     "pk": 21,
     "fields": {
       "name": "Отдел № 1",
-      "sortBy": 21,
+      "sortBy": 22,
       "unique": "отдел1",
       "showName": "Отдел № 1"
     }
@@ -394,7 +458,7 @@
     "pk": 22,
     "fields": {
       "name": "Отдел № 4",
-      "sortBy": 22,
+      "sortBy": 23,
       "unique": "отдел4",
       "showName": "Отдел № 4"
     }
@@ -404,7 +468,7 @@
     "pk": 23,
     "fields": {
       "name": "Отдел № 5",
-      "sortBy": 23,
+      "sortBy": 24,
       "unique": "отдел5",
       "showName": "Отдел № 5"
     }
@@ -414,7 +478,7 @@
     "pk": 24,
     "fields": {
       "name": "Отдел № 8",
-      "sortBy": 24,
+      "sortBy": 25,
       "unique": "отдел8",
       "showName": "Отдел № 8"
     }
@@ -424,7 +488,7 @@
     "pk": 25,
     "fields": {
       "name": "Отдел № 12",
-      "sortBy": 25,
+      "sortBy": 26,
       "unique": "отдел12",
       "showName": "Отдел № 12"
     }
@@ -434,7 +498,7 @@
     "pk": 26,
     "fields": {
       "name": "Отдел № 15",
-      "sortBy": 26,
+      "sortBy": 27,
       "unique": "отдел15",
       "showName": "Отдел № 15"
     }
@@ -444,7 +508,7 @@
     "pk": 27,
     "fields": {
       "name": "Отдел № 19",
-      "sortBy": 27,
+      "sortBy": 28,
       "unique": "отдел19",
       "showName": "Отдел № 19"
     }
@@ -454,7 +518,7 @@
     "pk": 28,
     "fields": {
       "name": "Отдел № 20",
-      "sortBy": 28,
+      "sortBy": 29,
       "unique": "отдел20",
       "showName": "Отдел № 20"
     }
@@ -464,7 +528,7 @@
     "pk": 29,
     "fields": {
       "name": "Отдел № 22",
-      "sortBy": 29,
+      "sortBy": 30,
       "unique": "отдел22",
       "showName": "Отдел № 22"
     }
@@ -474,7 +538,7 @@
     "pk": 30,
     "fields": {
       "name": "Отдел № 23",
-      "sortBy": 30,
+      "sortBy": 31,
       "unique": "отдел23",
       "showName": "Отдел № 23"
     }
@@ -484,7 +548,7 @@
     "pk": 31,
     "fields": {
       "name": "Отдел № 28",
-      "sortBy": 31,
+      "sortBy": 32,
       "unique": "отдел28",
       "showName": "Отдел № 28"
     }
@@ -494,7 +558,7 @@
     "pk": 32,
     "fields": {
       "name": "Отдел № 29",
-      "sortBy": 32,
+      "sortBy": 33,
       "unique": "отдел29",
       "showName": "Отдел № 29"
     }
@@ -504,7 +568,7 @@
     "pk": 33,
     "fields": {
       "name": "Отдел № 34",
-      "sortBy": 33,
+      "sortBy": 34,
       "unique": "отдел34",
       "showName": "Отдел № 34"
     }
@@ -514,7 +578,7 @@
     "pk": 34,
     "fields": {
       "name": "Отдел № 35",
-      "sortBy": 34,
+      "sortBy": 35,
       "unique": "отдел35",
       "showName": "Отдел № 35"
     }
@@ -524,7 +588,7 @@
     "pk": 35,
     "fields": {
       "name": "Отдел № 36",
-      "sortBy": 35,
+      "sortBy": 36,
       "unique": "отдел36",
       "showName": "Отдел № 36"
     }
@@ -534,7 +598,7 @@
     "pk": 36,
     "fields": {
       "name": "Отдел № 38",
-      "sortBy": 36,
+      "sortBy": 37,
       "unique": "отдел38",
       "showName": "Отдел № 38"
     }
@@ -544,7 +608,7 @@
     "pk": 37,
     "fields": {
       "name": "Отдел № 41",
-      "sortBy": 37,
+      "sortBy": 0,
       "unique": "отдел41",
       "showName": "Отдел № 41"
     }
@@ -567,6 +631,16 @@
       "sortBy": 39,
       "unique": "отдел43",
       "showName": "Отдел № 43"
+    }
+  },
+  {
+    "model": "Auth_LDAP.Departments",
+    "pk": 40,
+    "fields": {
+      "name": "Юридический отдел",
+      "sortBy": 18,
+      "unique": "юридическийотдел",
+      "showName": "Юридический отдел"
     }
   }
 ]
