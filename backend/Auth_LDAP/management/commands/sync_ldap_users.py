@@ -51,8 +51,12 @@ class Command(BaseCommand):
                         'ldap_id': ''.join([hex(b) for b in user_data['objectGUID'][0]]),
                         'username' : user_data['sAMAccountName'][0].decode('utf-8'),
                         'email' : user_data['mail'][0].decode('utf-8'),
-                        'isChecked': True
+                        'isChecked': True,
+                        'OGGSK': False,
+                        'MATRIX': False,
+                        'UO': False,
                     }
+                    data['is_superuser'] = data['username'] == 'svc4800court'
                     job_str = user_data['title'][0].decode('utf-8') if user_data.get('title') else 'NoJob'
                     job_unique = self.__to_unique(job_str)
                     job_el = Jobs.objects.filter(unique=job_unique).first()
@@ -79,23 +83,24 @@ class Command(BaseCommand):
 
                     group_dns = user_data.get('memberOf', [])
                     groups = [group_dn.decode('utf-8') for group_dn in group_dns]
-                    for flag, group_dn in AUTH_LDAP_USER_FLAGS_BY_GROUP.items():
-                        if group_dn in groups:
-                            data[flag] = True
-
+                    for flag, groups_dn in AUTH_LDAP_USER_FLAGS_BY_GROUP.items():
+                        for group_dn in groups_dn:
+                            if group_dn in groups:
+                                data[flag] = True
+                                
                     user, user_create = CustomUser.objects.update_or_create(ldap_id=data['ldap_id'], defaults=data)
                     if user_create or user.name_key != name_key:
-                        parsed_name = morph.parse(user_data['GivenName'][0].decode('utf-8') if user_data.get('GivenName') else 'Иван')[0]
+                        parsed_name = morph.parse(user_data['givenName'][0].decode('utf-8') if user_data.get('givenName') else 'Иван')[0]
                         user.name = name_str
                         user.name_key = name_key
                         user_update = True
                         user.name_inflected = self.__inflect_field(morph, name_str, 'datv', parsed_name.tag.gender).title()
                     
-                    if user_create or user.job.unique != job_unique:
+                    if user_create or user.job.unique != job_unique or user.job.sortBy != job_el.sortBy:
                         user_update = True
                         user.job = job_el
                     
-                    if user_create or user.department.unique != dep_unique:
+                    if user_create or user.department.unique != dep_unique or user.department.sortBy != dep_el.sortBy:
                         user_update = True
                         user.department = dep_el
                         

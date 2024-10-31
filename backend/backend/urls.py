@@ -21,4 +21,5 @@ from Auth_LDAP.views import *
 urlpatterns = [
     path('admin', admin.site.urls),
     path('api/v1/auth', ldap_authorization, name="authorization"),
+    path('api/v1/sync_users', sync_users, name="sync_users"),
 ]
