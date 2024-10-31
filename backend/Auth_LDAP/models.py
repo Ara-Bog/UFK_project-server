@@ -51,7 +51,6 @@ class CustomUserManager(BaseUserManager):
             username=username,
             **extra_fields,
         )
-        user.is_employee = True
         user.is_chief = True
         user.is_superuser = True
         user.set_password(password)
@@ -79,6 +78,7 @@ class CustomUser(AbstractBaseUser):
 
     
     is_superuser = models.BooleanField(default=False)
+    is_admin = models.BooleanField(default=False)
     is_chief = models.BooleanField(default=False)
     OGGSK = models.BooleanField(default=False)
     UO = models.BooleanField(default=False)
@@ -108,14 +108,5 @@ class CustomUser(AbstractBaseUser):
     def is_staff(self):
         "Is the user a member of staff?"
         # Simplest possible answer: All admins are staff
-        return self.is_superuser
+        return self.is_superuser or self.is_admin
     
-    # def delete(self, using=None, keep_parents=False):
-    #     # Delete related Vacations instances
-    #     Vacations.objects.filter(user=self).delete()
-
-    #     # Delete related Logs instances
-    #     Logs.objects.filter(vacation_id__user=self).delete()
-
-    #     # Call the superclass's delete() method
-    #     super().delete(using=using, keep_parents=keep_parents)

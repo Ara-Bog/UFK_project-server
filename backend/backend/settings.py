@@ -14,7 +14,7 @@ from pathlib import Path
 import password
 import os
 import ldap
-from django_auth_ldap.config import LDAPSearch, LDAPGroupQuery, NestedGroupOfNamesType
+from django_auth_ldap.config import LDAPSearch, NestedGroupOfNamesType
 
 # адрес сервера ldap
 AUTH_LDAP_SERVER_URI = password.LDAP_HOST
@@ -28,13 +28,6 @@ AUTH_LDAP_USER_SEARCH = LDAPSearch(
     password.LDAP_SEARCH_USER,
     ldap.SCOPE_SUBTREE, "(sAMAccountName=%(user)s)"
 )
-
-AUTH_LDAP_USER_ATTR_MAP = {
-    "username": "sAMAccountName",
-    "name": "Name",
-    "email": "mail",
-    "ldap_id": 'ObjectGUID',
-}
 
 AUTH_LDAP_GROUP_SEARCH = LDAPSearch(
     password.LDAP_SEARCH_GROUP,
@@ -50,11 +43,11 @@ AUTH_LDAP_GROUP_TYPE = NestedGroupOfNamesType()
 # )
 
 AUTH_LDAP_USER_FLAGS_BY_GROUP = {
-    "is_superuser": password.LDAP_GROUP_ADMIN,
-    "is_chief": password.LDAP_GROUP_CHIEF,
-    "OGGSK": password.LDAP_OGGSK_GROUP,
-    "UO": password.LDAP_OU_GROUP,
-    "MATRIX": password.LDAP_MATRIX_GROUP,
+    "is_admin": [password.LDAP_GROUP_ADMIN],
+    "is_chief": [password.LDAP_GROUP_CHIEF],
+    "OGGSK": [password.LDAP_OGGSK_GROUP, password.LDAP_TEST_OGGSK_GROUP],
+    "UO": [password.LDAP_OU_GROUP],
+    "MATRIX": [password.LDAP_MATRIX_GROUP],
 }
 
 AUTHENTICATION_BACKENDS = [
@@ -93,6 +86,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
