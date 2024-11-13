@@ -11,11 +11,12 @@ services:
       python manage.py makemigrations &&
       python manage.py makemigrations Auth_LDAP &&
       python manage.py migrate &&
-      python manage.py loaddata initial_data.json &&
-      python manage.py sync_ldap_users &
+      python manage.py loaddata initial_data.json &
       python manage.py runserver 0.0.0.0:8000"
     volumes:
-      - ./ldap_auth-server:/ldap_auth-server
+      - .:/Auth_LDAP
     ports:
       - "8000:8000"
     network_mode: "host"
+# &
+#        python manage.py sync_ldap_users &
