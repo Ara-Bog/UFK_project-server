@@ -72,6 +72,10 @@ class CustomUser(AbstractBaseUser):
     department = models.ForeignKey(Departments, blank=True, null=True, on_delete=models.PROTECT, verbose_name="Отдел")
     username = models.CharField(max_length=255, unique=True)
     isChecked = models.BooleanField(verbose_name="Прошел проверку в LDAP", default=False, editable=False)
+    manually_added = models.BooleanField(verbose_name="Добавлен вручную", default=False)
+    isDisabled = models.BooleanField(verbose_name="Блокирован", default=False)
+    isFired = models.BooleanField(verbose_name="Уволен", default=False)
+    description = models.CharField(max_length=255, blank=True, null=True, verbose_name="Описание")
 
     ## Склонение текстовых полей
     name_inflected = models.CharField(blank=True, null=True, max_length=255, verbose_name="ФИО в Д.П.")

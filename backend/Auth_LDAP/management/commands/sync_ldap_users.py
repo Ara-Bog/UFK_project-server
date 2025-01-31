@@ -26,9 +26,8 @@ class Command(BaseCommand):
         l = ldap.initialize(LDAP_HOST)
         morph = pymorphy2.MorphAnalyzer()
         l.simple_bind_s(LDAP_HOST_USER, LDAP_HOST_USER_PASSWORD)
-        
         page_size = 50
-        filter_search = f'(&(objectClass=user)(!(msDS-parentdistname:={LDAP_FOLDER_DELETE_USER}))(!(memberOf:=CN=4800 Все терр. отделы УФК по Московской области,OU=Группы рассылки Терр. отделов,OU=Groups,OU=4800,OU=FT,DC=fsfk,DC=local)))'
+        filter_search = f'(&(objectClass=user){"".join(map(lambda x: f"(!(memberOf:={x}))", LDAP_EXCLUDE_GROUPS))})'
         req_ctrl = SimplePagedResultsControl(criticality=True, size=page_size, cookie='')
         results = l.search_ext(base=LDAP_FOLDER_USERS, scope=ldap.SCOPE_SUBTREE, filterstr=filter_search, attrlist=LDAP_LIST_ATTRS, serverctrls=[req_ctrl])
 
@@ -51,12 +50,29 @@ class Command(BaseCommand):
                         'ldap_id': ''.join([hex(b) for b in user_data['objectGUID'][0]]),
                         'username' : user_data['sAMAccountName'][0].decode('utf-8'),
                         'email' : user_data['mail'][0].decode('utf-8'),
+                        'description': user_data.get('description', [b''])[0].decode('utf-8'),
                         'isChecked': True,
                         'OGGSK': False,
                         'MATRIX': False,
                         'UO': False,
+                        'manually_added': False,
+                        'isDisabled': False,
+                        'isFired': False,
                     }
+
                     data['is_superuser'] = data['username'] == 'svc4800court'
+
+                    user_account_control = user_data.get('userAccountControl', [b''])[0]
+                    uac_value = int(user_account_control.decode('utf-8'))
+
+                    if uac_value & 0x0002: 
+                        data['isDisabled'] = True
+
+                    parent_distname = user_data.get('msDS-parentdistname', [b''])[0]
+                    parent_distname_str = parent_distname.decode('utf-8') if parent_distname else ''
+                    if parent_distname_str == LDAP_FOLDER_DELETE_USER:
+                        data['isFired'] = True
+
                     job_str = user_data['title'][0].decode('utf-8') if user_data.get('title') else 'NoJob'
                     job_unique = self.__to_unique(job_str)
                     job_el = Jobs.objects.filter(unique=job_unique).first()

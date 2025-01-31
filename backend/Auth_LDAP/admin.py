@@ -11,9 +11,9 @@ import requests
 
 @admin.register(CustomUser)
 class CustomUserAdmin(admin.ModelAdmin):
-    list_display = [ 'email', 'tab_number', 'name', 'is_chief', 'OGGSK', 'UO', 'MATRIX', 'is_admin', 'job', 'department', 'isChecked']
+    list_display = [ 'email', 'tab_number', 'name', 'is_chief', 'OGGSK', 'UO', 'MATRIX', 'is_admin', 'job', 'department', 'isChecked', 'manually_added', 'isDisabled', 'isFired']
     search_fields = ['email', 'name']
-    list_filter = ['is_chief', 'isChecked', 'OGGSK', 'UO', 'MATRIX', 'is_admin','job', 'department']
+    list_filter = ['is_chief', 'isChecked', 'isDisabled', 'isFired', 'manually_added', 'OGGSK', 'UO', 'MATRIX', 'is_admin','job', 'department']
     ordering = ['email']
     filter_horizontal = []
 
@@ -33,7 +33,7 @@ class CustomUserAdmin(admin.ModelAdmin):
             }
 
             for id in data:
-                response = requests.delete(f'http://0.0.0.0:8080/api/v1/delete_data/{id}', headers=headers)
+                response = requests.delete(f'http://0.0.0.0:8079/api/v1/delete_data/{id}', headers=headers)
 
                 if response.status_code == 200:
                     successful_deletions.append(id)
