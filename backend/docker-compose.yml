@@ -11,7 +11,10 @@ services:
       python manage.py makemigrations &&
       python manage.py makemigrations Auth_LDAP &&
       python manage.py migrate &&
-      python manage.py loaddata initial_data.json &
+      python manage.py load_all_fixtures &&
+      python manage.py sync_ldap_users &&
+      celery -A backend beat --loglevel=INFO &
+      celery -A backend worker --loglevel=INFO --concurrency=1 --pool=solo -n workerLDAP &
       python manage.py runserver 0.0.0.0:8000"
     volumes:
       - .:/Auth_LDAP

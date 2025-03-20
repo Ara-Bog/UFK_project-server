@@ -1,0 +1,23 @@
+[
+  {
+    "model": "Auth_LDAP.TypesNotify",
+    "pk": 1,
+    "fields": {
+      "name": "Факт вступления в силу"
+    }
+  },
+  {
+    "model": "Auth_LDAP.TypesNotify",
+    "pk": 2,
+    "fields": {
+      "name": "Отчет в Минфин"
+    }
+  },
+  {
+    "model": "Auth_LDAP.TypesNotify",
+    "pk": 3,
+    "fields": {
+      "name": "Жалоба"
+    }
+  }
+]

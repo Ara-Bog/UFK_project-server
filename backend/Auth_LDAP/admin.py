@@ -9,6 +9,11 @@ from django.contrib import messages
 from .models import * 
 import requests
 
+DELETE_API = [
+    'http://0.0.0.0:8079/api/v1/delete_data',
+    'http://0.0.0.0:8080/api/v1/delete_data',
+]
+
 @admin.register(CustomUser)
 class CustomUserAdmin(admin.ModelAdmin):
     list_display = [ 'email', 'tab_number', 'name', 'is_chief', 'OGGSK', 'UO', 'MATRIX', 'is_admin', 'job', 'department', 'isChecked', 'manually_added', 'isDisabled', 'isFired']
@@ -33,12 +38,16 @@ class CustomUserAdmin(admin.ModelAdmin):
             }
 
             for id in data:
-                response = requests.delete(f'http://0.0.0.0:8079/api/v1/delete_data/{id}', headers=headers)
+                flag_delete = True
+                for api in DELETE_API:
+                    response = requests.delete(f'/{id}', headers=headers)
 
-                if response.status_code == 200:
+                    if response.status_code != 200:
+                        flag_delete = False
+                        error_messages.append(f"Ошибка при удалении {queryset.get(id=id)}: {response.status_code} - {response.text}")
+                        break
+                if flag_delete:
                     successful_deletions.append(id)
-                else:
-                    error_messages.append(f"Ошибка при удалении {queryset.get(id=id)}: {response.status_code} - {response.text}")
             
             queryset.filter(id__in=successful_deletions).delete()
 
@@ -63,5 +72,19 @@ class DepartmentsAdmin(admin.ModelAdmin):
     list_display = ['name', 'unique', 'sortBy']
     search_fields = ['name']
     ordering = ['-sortBy']
+
+
+@admin.register(TypesNotify)
+class TypesNotifyAdmin(admin.ModelAdmin):
+    list_display = ['name']
+    search_fields = ['name']
+
+
+@admin.register(NotifyTask)
+class NotifyTaskAdmin(admin.ModelAdmin):
+    list_display = ['type_message', 'target', 'period', 'last_update', 'finish_date']
+    list_filter = ['type_message', 'last_update', 'finish_date']
+    search_fields = ['target']
+
 
 admin.site.unregister(Group)

@@ -1,0 +1,202 @@
+[
+  {
+    "model": "Auth_LDAP.Jobs",
+    "pk": 1,
+    "fields": {
+      "name": "Руководитель",
+      "sortBy": 1,
+      "unique": "руководитель",
+      "job_inflected": "Руководителю"
+    }
+  },
+  {
+    "model": "Auth_LDAP.Jobs",
+    "pk": 2,
+    "fields": {
+      "name": "Заместитель руководителя",
+      "sortBy": 2,
+      "unique": "заместительруководителя",
+      "job_inflected": "Заместителю руководителя"
+    }
+  },
+  {
+    "model": "Auth_LDAP.Jobs",
+    "pk": 3,
+    "fields": {
+      "name": "ВРИО Заместителя руководителя",
+      "sortBy": 3,
+      "unique": "вриозаместителяруководителя",
+      "job_inflected": "ВРИО Заместителю руководителя"
+    }
+  },
+  {
+    "model": "Auth_LDAP.Jobs",
+    "pk": 4,
+    "fields": {
+      "name": "Помощник руководителя",
+      "sortBy": 4,
+      "unique": "помощникруководителя",
+      "job_inflected": "Помощнику руководителя"
+    }
+  },
+  {
+    "model": "Auth_LDAP.Jobs",
+    "pk": 5,
+    "fields": {
+      "name": "Начальник отдела",
+      "sortBy": 5,
+      "unique": "начальникотдела",
+      "job_inflected": "Начальнику отдела"
+    }
+  },
+  {
+    "model": "Auth_LDAP.Jobs",
+    "pk": 6,
+    "fields": {
+      "name": "Заместитель начальника отдела",
+      "sortBy": 6,
+      "unique": "заместительначальникаотдела",
+      "job_inflected": "Заместителю начальника отдела"
+    }
+  },
+  {
+    "model": "Auth_LDAP.Jobs",
+    "pk": 7,
+    "fields": {
+      "name": "Заместитель начальника",
+      "sortBy": 7,
+      "unique": "заместительначальника",
+      "job_inflected": "Заместителю начальника"
+    }
+  },
+  {
+    "model": "Auth_LDAP.Jobs",
+    "pk": 8,
+    "fields": {
+      "name": "ВРИО Начальника отдела",
+      "sortBy": 8,
+      "unique": "врионачальникаотдела",
+      "job_inflected": "ВРИО Начальнику отдела"
+    }
+  },
+  {
+    "model": "Auth_LDAP.Jobs",
+    "pk": 9,
+    "fields": {
+      "name": "Главный казначей",
+      "sortBy": 9,
+      "unique": "главныйказначей",
+      "job_inflected": "Главному казначею"
+    }
+  },
+  {
+    "model": "Auth_LDAP.Jobs",
+    "pk": 10,
+    "fields": {
+      "name": "Старший казначей",
+      "sortBy": 10,
+      "unique": "старшийказначей",
+      "job_inflected": "Старшему казначею"
+    }
+  },
+  {
+    "model": "Auth_LDAP.Jobs",
+    "pk": 11,
+    "fields": {
+      "name": "Казначей",
+      "sortBy": 11,
+      "unique": "казначей",
+      "job_inflected": "Казначею"
+    }
+  },
+  {
+    "model": "Auth_LDAP.Jobs",
+    "pk": 12,
+    "fields": {
+      "name": "Главный специалист - эксперт",
+      "sortBy": 12,
+      "unique": "главныйспециалистэксперт",
+      "job_inflected": "Главному специалисту - эксперту"
+    }
+  },
+  {
+    "model": "Auth_LDAP.Jobs",
+    "pk": 13,
+    "fields": {
+      "name": "Ведущий специалист - эксперт",
+      "sortBy": 13,
+      "unique": "ведущийспециалистэксперт",
+      "job_inflected": "Ведущему специалисту - эксперту"
+    }
+  },
+  {
+    "model": "Auth_LDAP.Jobs",
+    "pk": 14,
+    "fields": {
+      "name": "Специалист - эксперт",
+      "sortBy": 14,
+      "unique": "специалистэксперт",
+      "job_inflected": "Специалисту - эксперту"
+    }
+  },
+  {
+    "model": "Auth_LDAP.Jobs",
+    "pk": 15,
+    "fields": {
+      "name": "Старший специалист 1 разряда",
+      "sortBy": 15,
+      "unique": "старшийспециалист1разряда",
+      "job_inflected": "Старшему специалисту 1 разряда"
+    }
+  },
+  {
+    "model": "Auth_LDAP.Jobs",
+    "pk": 16,
+    "fields": {
+      "name": "Старший специалист 3 разряда",
+      "sortBy": 16,
+      "unique": "старшийспециалист3разряда",
+      "job_inflected": "Старшему специалисту 3 разряда"
+    }
+  },
+  {
+    "model": "Auth_LDAP.Jobs",
+    "pk": 17,
+    "fields": {
+      "name": "Специалист 1 разряда",
+      "sortBy": 17,
+      "unique": "специалист1разряда",
+      "job_inflected": "Специалисту 1 разряда"
+    }
+  },
+  {
+    "model": "Auth_LDAP.Jobs",
+    "pk": 18,
+    "fields": {
+      "name": "Специалист 2 разряда",
+      "sortBy": 18,
+      "unique": "специалист2разряда",
+      "job_inflected": "Специалисту 2 разряда"
+    }
+  },
+  {
+    "model": "Auth_LDAP.Jobs",
+    "pk": 19,
+    "fields": {
+      "name": "Специалист 3 разряда",
+      "sortBy": 19,
+      "unique": "специалист3разряда",
+      "job_inflected": "Специалисту 3 разряда"
+    }
+  },
+  {
+    "model": "Auth_LDAP.Jobs",
+    "pk": 20,
+    "fields": {
+      "name": "Эксперт",
+      "sortBy": 20,
+      "unique": "эксперт",
+      "job_inflected": "Эксперту"
+    }
+  }
+]

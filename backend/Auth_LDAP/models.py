@@ -114,3 +114,39 @@ class CustomUser(AbstractBaseUser):
         # Simplest possible answer: All admins are staff
         return self.is_superuser or self.is_admin
     
+class TypesNotify(models.Model):
+    class Meta:
+        verbose_name = 'Тип уведомления'
+        verbose_name_plural = 'Типы уведомлений'
+
+    name = models.TextField(verbose_name='Наименование')
+
+    def __str__(self) -> str:
+        return self.name
+
+class NotifyTask(models.Model):
+    SYSTEMS = {
+        "UO": "Юристы",
+        "OGGSK": "Кадры",
+        "MATRIX": "Матрица",
+    }
+
+    class Meta:
+        verbose_name = 'Задача на уведомление'
+        verbose_name_plural = 'Задачи на уведомления'
+
+    forign_id = models.IntegerField(verbose_name='Связанный ключ')
+    system = models.CharField(max_length=10, choices=SYSTEMS, verbose_name='Система')
+    type_message = models.ForeignKey(TypesNotify, on_delete=models.PROTECT, verbose_name="Тип уведомления")
+    target = models.ForeignKey(CustomUser, on_delete=models.CASCADE, verbose_name="Пользователь")
+
+    header = models.TextField(verbose_name='Тема сообщения')
+    title = models.TextField(verbose_name='Заголовок сообщения')
+    message = models.TextField(verbose_name='Текст сообщения')
+
+    period = models.IntegerField(verbose_name='Каждые N дней', default=1)
+    finish_date = models.DateField(verbose_name="Крайний срок") 
+    last_update = models.DateField(verbose_name="Последняя дата проверки") 
+
+    def __str__(self) -> str:
+        return f'Для {self.target} | {self.type_message} | {self.header}'
