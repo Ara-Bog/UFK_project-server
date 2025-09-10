@@ -1,0 +1,119 @@
+[
+  {
+    "model": "Auth_LDAP.DocTemplate",
+    "pk": 1,
+    "fields": {
+      "name": "roles_department",
+      "name_visible": "Роли пользователей отдела",
+      "description": "Excel таблица полномочий сотрудников отдела",
+      "system": "MATRIX",
+      "file": "MATRIX_TEMPLATE_department.xlsx",
+      "created_at": "2025-10-09T12:00:00Z",
+      "updated_at": "2025-10-09T12:00:00Z"
+    }
+  },
+  {
+    "model": "Auth_LDAP.DocTemplate",
+    "pk": 2,
+    "fields": {
+      "name": "roles_user",
+      "name_visible": "Роли пользователя",
+      "description": "Excel таблица полномочий сотрудника",
+      "system": "MATRIX",
+      "file": "MATRIX_TEMPLATE_USER.xlsx",
+      "created_at": "2025-10-09T12:00:00Z",
+      "updated_at": "2025-10-09T12:00:00Z"
+    }
+  },
+  {
+    "model": "Auth_LDAP.DocTemplate",
+    "pk": 3,
+    "fields": {
+      "name": "court_out",
+      "name_visible": "Судебные дела сотрудника ЮР отдела",
+      "description": "Excel таблица выгрузка судебных дел и их инстанций и текущими уведомлениями",
+      "system": "UO",
+      "file": "COURTS_LIST.xlsx",
+      "created_at": "2025-10-09T12:00:00Z",
+      "updated_at": "2025-10-09T12:00:00Z"
+    }
+  },
+  {
+    "model": "Auth_LDAP.DocTemplate",
+    "pk": 4,
+    "fields": {
+      "name": "form_vacations",
+      "name_visible": "Форма отпусков",
+      "description": "Excel таблица для формирования отпусков сотрудников с последующей загрузкой в программу",
+      "system": "OGGSK",
+      "file": "OGGSK_SCHEMA_VACAITONS.xlsm",
+      "created_at": "2025-10-09T12:00:00Z",
+      "updated_at": "2025-10-09T12:00:00Z"
+    }
+  },
+  {
+    "model": "Auth_LDAP.DocTemplate",
+    "pk": 5,
+    "fields": {
+      "name": "prikaz",
+      "name_visible": "Приказ отпуск",
+      "description": "DOCX шаблон приказа о предоставления отпуска и его вариации",
+      "system": "OGGSK",
+      "file": "OGGSK_TEMP_PRIKAZ.docx",
+      "created_at": "2025-10-09T12:00:00Z",
+      "updated_at": "2025-10-09T12:00:00Z"
+    }
+  },
+  {
+    "model": "Auth_LDAP.DocTemplate",
+    "pk": 6,
+    "fields": {
+      "name": "vozlozhenie",
+      "name_visible": "Возложение обязанностей",
+      "description": "DOCX шаблон возложения обязаностей сотрудника и его вариации",
+      "system": "OGGSK",
+      "file": "OGGSK_TEMP_VOZLOZH.docx",
+      "created_at": "2025-10-09T12:00:00Z",
+      "updated_at": "2025-10-09T12:00:00Z"
+    }
+  },
+  {
+    "model": "Auth_LDAP.DocTemplate",
+    "pk": 7,
+    "fields": {
+      "name": "plan_grafic",
+      "name_visible": "План график отпусков управления",
+      "description": "DOCX шаблон отпусков управления. Генерируется отдельным API, т.к. необходима определенная структура данных и сортировка",
+      "system": "OGGSK",
+      "file": "OGGSK_TEMP_PLAN_GRAFIC.docx",
+      "created_at": "2025-10-09T12:00:00Z",
+      "updated_at": "2025-10-09T12:00:00Z"
+    }
+  },
+  {
+    "model": "Auth_LDAP.DocTemplate",
+    "pk": 8,
+    "fields": {
+      "name": "oznakomlenie",
+      "name_visible": "Лист ознакомления",
+      "description": "DOCX шаблон листа ознакомления сотрудников",
+      "system": "OGGSK",
+      "file": "OGGSK_TEMP_OZNAKOMLENIE.docx",
+      "created_at": "2025-10-09T12:00:00Z",
+      "updated_at": "2025-10-09T12:00:00Z"
+    }
+  },
+  {
+    "model": "Auth_LDAP.DocTemplate",
+    "pk": 9,
+    "fields": {
+      "name": "uvedomlenie",
+      "name_visible": "Уведомления о предоставлении отпуска",
+      "description": "DOCX шаблон о предоставлении отпуска (вариации) сотруднику",
+      "system": "OGGSK",
+      "file": "OGGSK_TEMP_UVEDOMLENIE.docx",
+      "created_at": "2025-10-09T12:00:00Z",
+      "updated_at": "2025-10-09T12:00:00Z"
+    }
+  }
+]

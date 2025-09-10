@@ -1,64 +1,18 @@
 from django.contrib import admin
 from django.contrib.auth.models import Group
-from django.core.exceptions import ValidationError
-from django.utils.translation import gettext_lazy
-from django.core.management import call_command
 from rest_framework.authtoken.models import Token
 from django.contrib import messages
 
 from .models import * 
 import requests
 
-DELETE_API = [
-    'http://0.0.0.0:8079/api/v1/delete_data',
-    'http://0.0.0.0:8080/api/v1/delete_data',
-]
-
 @admin.register(CustomUser)
 class CustomUserAdmin(admin.ModelAdmin):
-    list_display = [ 'email', 'tab_number', 'name', 'is_chief', 'OGGSK', 'UO', 'MATRIX', 'is_admin', 'job', 'department', 'isChecked', 'manually_added', 'isDisabled', 'isFired']
+    list_display = [ 'email', 'tab_number', 'name', 'chief_rule', 'manager_rule', 'OGGSK', 'UO', 'MATRIX', 'is_admin', 'job', 'department', 'isChecked', 'manually_added', 'isDisabled', 'isFired']
     search_fields = ['email', 'name']
-    list_filter = ['is_chief', 'isChecked', 'isDisabled', 'isFired', 'manually_added', 'OGGSK', 'UO', 'MATRIX', 'is_admin','job', 'department']
+    list_filter = ['chief_rule', 'manager_rule', 'isChecked', 'isDisabled', 'isFired', 'manually_added', 'OGGSK', 'UO', 'MATRIX', 'is_admin','job', 'department']
     ordering = ['email']
     filter_horizontal = []
-
-    def delete_queryset(self, request, queryset):
-        successful_deletions = []
-        error_messages = [f"Ошибка при удалении {item}: пользователь присутствует в LDAP" for item in queryset.filter(isChecked=True)]
-        
-        queryset = queryset.exclude(isChecked=True)
-
-        data = list(queryset.values_list('id', flat=True))
-
-        if data:
-            user_token, _ = Token.objects.get_or_create(user=request.user)
-            headers = {
-                'Authorization': f'{user_token.key}',
-                'Content-Type': 'application/json',
-            }
-
-            for id in data:
-                flag_delete = True
-                for api in DELETE_API:
-                    response = requests.delete(f'/{id}', headers=headers)
-
-                    if response.status_code != 200:
-                        flag_delete = False
-                        error_messages.append(f"Ошибка при удалении {queryset.get(id=id)}: {response.status_code} - {response.text}")
-                        break
-                if flag_delete:
-                    successful_deletions.append(id)
-            
-            queryset.filter(id__in=successful_deletions).delete()
-
-            if len(successful_deletions) == len(data):
-                messages.success(request, "Пользователи успешно удалены.")
-            else:
-                messages.warning(request, f"Некоторые пользователи были успешно удалены, остальные не были удалены из-за ошибок.")
-            for error_message in error_messages:
-                messages.error(request, error_message)
-        
-        return queryset.none()
 
 @admin.register(Jobs)
 class JobsAdmin(admin.ModelAdmin):
@@ -82,9 +36,14 @@ class TypesNotifyAdmin(admin.ModelAdmin):
 
 @admin.register(NotifyTask)
 class NotifyTaskAdmin(admin.ModelAdmin):
-    list_display = ['type_message', 'target', 'period', 'last_update', 'finish_date']
-    list_filter = ['type_message', 'last_update', 'finish_date']
+    list_display = ['type_message', 'target', 'period', 'date_last_update', 'date_finish']
+    list_filter = ['type_message', 'date_last_update', 'date_finish']
     search_fields = ['target']
 
+@admin.register(DocTemplate)
+class DocTemplateAdmin(admin.ModelAdmin):
+    list_display = ['name', 'description', 'system', 'created_at', 'updated_at']
+    list_filter = ['system', 'updated_at']
+    search_fields = ['name']
 
 admin.site.unregister(Group)

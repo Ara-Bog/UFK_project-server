@@ -15,6 +15,7 @@ import password
 import os
 import ldap
 from django_auth_ldap.config import LDAPSearch, NestedGroupOfNamesType
+import logging
 
 # адрес сервера ldap
 AUTH_LDAP_SERVER_URI = password.LDAP_HOST
@@ -37,17 +38,13 @@ AUTH_LDAP_GROUP_SEARCH = LDAPSearch(
 
 AUTH_LDAP_GROUP_TYPE = NestedGroupOfNamesType()
 
-# AUTH_LDAP_REQUIRE_GROUP = (
-#     LDAPGroupQuery(password.LDAP_REQUIRE_GROUP)
-#     | LDAPGroupQuery(password.LDAP_GROUP_ADMIN)
-# )
-
 AUTH_LDAP_USER_FLAGS_BY_GROUP = {
     "is_admin": [password.LDAP_GROUP_ADMIN],
-    "is_chief": [password.LDAP_GROUP_CHIEF],
-    "OGGSK": [password.LDAP_OGGSK_GROUP, password.LDAP_TEST_OGGSK_GROUP],
+    "chief_rule": [password.LDAP_GROUP_CHIEF, password.LDAP_GROUP_CHIEF_TER],
+    "manager_rule": [password.LDAP_RUK_GROUP],
+    "OGGSK": [password.LDAP_OGGSK_GROUP],
     "UO": [password.LDAP_OU_GROUP],
-    "MATRIX": [password.LDAP_MATRIX_GROUP],
+    "MATRIX": [password.LDAP_GROUP_CHIEF, password.LDAP_GROUP_CHIEF_TER],
 }
 
 AUTHENTICATION_BACKENDS = [
@@ -69,6 +66,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
+# logging
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -78,11 +77,15 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'Auth_LDAP.apps.AuthLdapConfig',
+    'django_cleanup.apps.CleanupConfig',
     'rest_framework',
     'rest_framework.authtoken',
     'django_python3_ldap',
-    'corsheaders'
+    'corsheaders',
+    'Auth_LDAP.apps.AuthLdapConfig',
+    'vacations.apps.VacationsConfig',
+    'court_cases.apps.CourtCasesConfig',
+    'matrix.apps.MatrixConfig',
 ]
 
 MIDDLEWARE = [
@@ -97,8 +100,10 @@ MIDDLEWARE = [
 ]
 
 CORS_ALLOW_ALL_ORIGINS = True
+CORS_EXPOSE_HEADERS = ['Content-Disposition']
 
 ROOT_URLCONF = 'backend.urls'
+
 
 TEMPLATES = [
     {
@@ -118,21 +123,12 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'backend.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'HOST': password.db_ip,
-        'PORT': password.db_port,
-        'NAME': password.db_name,
-        'USER': password.db_login,
-        'PASSWORD': password.db_password
-    }
+    'default': password.MAIN_DB,
 }
-
 
 
 # Password validation

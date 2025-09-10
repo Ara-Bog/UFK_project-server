@@ -15,11 +15,20 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 from Auth_LDAP.views import *
 
 urlpatterns = [
-    path('admin', admin.site.urls),
-    path('api/v1/auth', ldap_authorization, name="authorization"),
-    path('api/v1/sync_users', sync_users, name="sync_users"),
+    path('admin/', admin.site.urls),
+    path('ldap/api/v1/auth', ldap_authorization, name="authorization"),
+    path('ldap/api/v1/sync_users', sync_users, name="sync_users"),
+    path('ldap/api/v1/generate_doc', generate_docx, name="generate_doc"),
+    path('ldap/api/v1/get_file', get_document, name="get_file"),
+    path('ldap/api/v1/upload_templates', upload_templates, name="upload_templates"),
+    # API vacations
+    path('vacations/', include('vacations.urls')),
+    # API court_cases
+    path('court_cases/', include('court_cases.urls')),
+    # API matrix
+    path('matrix/', include('matrix.urls'))
 ]

@@ -11,6 +11,7 @@ from backend.settings import AUTH_LDAP_USER_FLAGS_BY_GROUP
 class Command(BaseCommand):
     help = 'Синхронизация данных пользователей с LDAP'
     __pattern = re.compile(r'[^а-яА-Я0-9]|(?<=\D)0+')
+    __super_user = 'svc4800court'
 
     def __inflect_field(self, morph, value, type_inflect, gender="masc"):
         values = value.split(' ')
@@ -33,6 +34,7 @@ class Command(BaseCommand):
 
         total_created = 0
         total_updates = 0
+        skiped = 0
         total = 0
         pages = 0
         CustomUser.objects.all().update(isChecked=False)
@@ -45,12 +47,14 @@ class Command(BaseCommand):
                 user_update = False
                 try:
                     if not user_data.get('mail'):
+                        skiped += 1
                         continue
                     data = {
                         'ldap_id': ''.join([hex(b) for b in user_data['objectGUID'][0]]),
                         'username' : user_data['sAMAccountName'][0].decode('utf-8'),
                         'email' : user_data['mail'][0].decode('utf-8'),
                         'description': user_data.get('description', [b''])[0].decode('utf-8'),
+                        'chief_rule': False,
                         'isChecked': True,
                         'OGGSK': False,
                         'MATRIX': False,
@@ -58,9 +62,17 @@ class Command(BaseCommand):
                         'manually_added': False,
                         'isDisabled': False,
                         'isFired': False,
+                        'manager_rule': False,
                     }
 
-                    data['is_superuser'] = data['username'] == 'svc4800court'
+                    data['is_superuser'] = data['username'] == self.__super_user
+
+                    name_str = user_data['name'][0].decode('utf-8') if user_data.get('name') else None
+                    if not (name_str or data['is_superuser']):
+                        skiped += 1
+                        continue
+
+                    name_key = name_str.lower().replace(' ', '')
 
                     user_account_control = user_data.get('userAccountControl', [b''])[0]
                     uac_value = int(user_account_control.decode('utf-8'))
@@ -78,9 +90,10 @@ class Command(BaseCommand):
                     job_el = Jobs.objects.filter(unique=job_unique).first()
                     if not job_el:
                         job_el = Jobs.objects.create(name=job_str, unique=job_unique)
-                    if not job_el.job_inflected:
+                    if not job_el.RAD_job or not job_el.DAT_job:
                         job_inflected, *job_any = job_str.split(' ')
-                        job_el.job_inflected = " ".join([self.__inflect_field(morph, job_inflected, 'datv'), *job_any])
+                        job_el.DAT_job = " ".join([self.__inflect_field(morph, job_inflected, 'datv'), *job_any])
+                        job_el.RAD_job = " ".join([self.__inflect_field(morph, job_inflected, 'gent'), *job_any])
                         job_el.save()
 
                     department_str =  user_data['department'][0].decode('utf-8') if user_data.get('department') else 'NoDep'
@@ -88,13 +101,11 @@ class Command(BaseCommand):
                     dep_el = Departments.objects.filter(unique=dep_unique).first()
                     if not dep_el:
                         dep_el = Departments.objects.create(name=department_str, unique=dep_unique) 
-                    if not dep_el.department_inflected:
+                    if not dep_el.RAD_department:
                         dep_inflected, *dep_any = department_str.split(' ')
-                        dep_el.department_inflected = " ".join([self.__inflect_field(morph, dep_inflected, 'gent'), *dep_any])
+                        dep_el.RAD_department = " ".join([self.__inflect_field(morph, dep_inflected, 'gent'), *dep_any])
                         dep_el.save()
 
-                    name_str = user_data['name'][0].decode('utf-8') if user_data.get('name') else 'NoName'
-                    name_key = name_str.lower().replace(' ', '')
 
 
                     group_dns = user_data.get('memberOf', [])
@@ -106,11 +117,14 @@ class Command(BaseCommand):
                                 
                     user, user_create = CustomUser.objects.update_or_create(ldap_id=data['ldap_id'], defaults=data)
                     if user_create or user.name_key != name_key:
-                        parsed_name = morph.parse(user_data['givenName'][0].decode('utf-8') if user_data.get('givenName') else 'Иван')[0]
                         user.name = name_str
                         user.name_key = name_key
                         user_update = True
-                        user.name_inflected = self.__inflect_field(morph, name_str, 'datv', parsed_name.tag.gender).title()
+                    
+                    if not (user.RAD_name and user.DAT_name):
+                        parsed_name = morph.parse(user_data['givenName'][0].decode('utf-8') if user_data.get('givenName') else 'Иван')[0]
+                        user.DAT_name = self.__inflect_field(morph, name_str, 'datv', parsed_name.tag.gender).title()
+                        user.RAD_name = self.__inflect_field(morph, name_str, 'gent', parsed_name.tag.gender).title()
                     
                     if user_create or user.job.unique != job_unique or user.job.sortBy != job_el.sortBy:
                         user_update = True
@@ -135,6 +149,6 @@ class Command(BaseCommand):
                     break
             else:
                 break
-        out = 'Найдено пользователей - {}; добавлены - {}; изменены - {}'.format(total, total_created, total_updates)
+        out = f'Найдено пользователей - {total}; добавлены - {total_created}; изменены - {total_updates}; пропущены - {skiped}'
         self.stdout.write(self.style.SUCCESS(out))
         return out

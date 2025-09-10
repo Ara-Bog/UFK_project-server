@@ -1,0 +1,37 @@
+[
+  {
+    "model": "court_cases.TypesEventsCourtCases",
+    "pk": 1,
+    "fields": {
+      "name": "I инстанция"
+    }
+  },
+  {
+    "model": "court_cases.TypesEventsCourtCases",
+    "pk": 2,
+    "fields": {
+      "name": "II инстанция (апеляция)"
+    }
+  },
+  {
+    "model": "court_cases.TypesEventsCourtCases",
+    "pk": 3,
+    "fields": {
+      "name": "III инстанция (кассация)"
+    }
+  },
+  {
+    "model": "court_cases.TypesEventsCourtCases",
+    "pk": 4,
+    "fields": {
+      "name": "III инстанция (2-ая кассация)"
+    }
+  },
+  {
+    "model": "court_cases.TypesEventsCourtCases",
+    "pk": 5,
+    "fields": {
+      "name": "Надзор"
+    }
+  }
+]

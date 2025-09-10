@@ -9,7 +9,6 @@ services:
     image: ldap_auth-server
     command: sh -c "
       python manage.py makemigrations &&
-      python manage.py makemigrations Auth_LDAP &&
       python manage.py migrate &&
       python manage.py load_all_fixtures &&
       celery -A backend beat --loglevel=INFO &
@@ -20,5 +19,8 @@ services:
     ports:
       - "8000:8000"
     network_mode: "host"
-# &
-#        python manage.py sync_ldap_users &
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "30m"
+        max-file: "3"
