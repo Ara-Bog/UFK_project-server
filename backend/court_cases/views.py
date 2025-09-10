@@ -58,7 +58,6 @@ def copy_row(sheet, row_to_copy):
                                                shrink_to_fit=source_cell.alignment.shrink_to_fit,
                                                indent=source_cell.alignment.indent)
 
-# ok
 @api_view(['GET'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])
@@ -68,7 +67,6 @@ def get_current_user_info(request):
     serializer_data = CustomUserSerializer(queryset, many=False).data
     return Response(serializer_data)
 
-# PROVERKA
 class CourtsListAPI(APIView):
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
@@ -119,7 +117,7 @@ class CourtsListAPI(APIView):
         except Exception as e:
             print("ERROR - CourtsListAPI - put: ", e)
             return Response(f'Не удалось загрузить дела: {str(e)}', status=status.HTTP_400_BAD_REQUEST)
-# PROVERKA
+
 class CourtSelfAPI(APIView):
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]

@@ -34,6 +34,9 @@ class Command(BaseCommand):
         current_date = timezone.now().date()
         queryset = NotifyTask.objects.all().exclude(date_last_update=current_date)
 
+        expired_count = NotifyTask.objects.filter(date_finish__lt=current_date).delete()[0]
+        self.stdout.write(self.style.SUCCESS(f'{msg_out}. Удалено просроченных: {expired_count}'))
+        
         result = []
         for task in queryset:
             delta = (task.date_finish - current_date).days
@@ -63,10 +66,8 @@ class Command(BaseCommand):
                     self.stdout.write(self.style.ERROR(f"Ошибка отправки сообщения пользователю: {e}"))
 
             server.quit()
-            msg_out = f'Сообщений отправленно - {counter}'
+            msg_out = f'Сообщений отправлено - {counter}'
 
         queryset.update(date_last_update=current_date)
         
-        queryset.filter(date_finish=current_date).delete()
-
         self.stdout.write(self.style.SUCCESS(msg_out))

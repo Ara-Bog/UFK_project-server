@@ -18,6 +18,10 @@ app.conf.beat_schedule = {
         'task': 'Auth_LDAP.tasks.check_notifys',
         'schedule':  crontab(hour=9, minute=0),
     },
+    'delete-old-vacations': {
+        'task': 'vacations.tasks.delete_old',
+        'schedule':  crontab(0, 0, day_of_month='10', month_of_year='1'),
+    },
 }
 
 app.autodiscover_tasks()

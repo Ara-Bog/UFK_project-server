@@ -104,7 +104,7 @@ def get_managers(request):
     queryset = CustomUser.objects.filter(isChecked=True, manager_rule=True)
     serializer_data = CustomUserSerializer(queryset, many=True).data
     return Response(serializer_data)
-# ok
+
 class UserSettingsAPIView(APIView):
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
@@ -135,7 +135,7 @@ class UserSettingsAPIView(APIView):
         serializer.save()
 
         return Response(serializer.data, status=status.HTTP_200_OK)
-# PROVERKA
+
 class ListVacationsAPIView(APIView):
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
@@ -166,7 +166,7 @@ class ListVacationsAPIView(APIView):
 
         return paginator.get_paginated_response(serializer_data)
     
-# ok
+
 class FillVacationsAPIView(APIView):
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
@@ -324,7 +324,7 @@ class FillVacationsAPIView(APIView):
         
         return Response(f"Найдено отпусков - {total}; Успешно загружено - {suc};Пересекающиеся - {cross}; Повторы - {repeat}; Пропущено - {ovner}; Ошибка обработки строк - {err}", 
                         status=status.HTTP_201_CREATED)
-# ok
+
 class VacationAPIView(APIView):
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
@@ -366,7 +366,7 @@ class VacationAPIView(APIView):
         serializer_logs = LogsSerializer(queryset, many=True).data
 
         return Response(serializer_logs, status=status.HTTP_200_OK)
-# ok
+
 class TransferAPIView(APIView):
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
@@ -501,7 +501,7 @@ class TransferAPIView(APIView):
         # Сериализуем результат
         serializer = TransfersSerializer(transaction_obj)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
-# ok
+
 class UserPageAPIView(APIView):
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
@@ -527,7 +527,7 @@ class UserPageAPIView(APIView):
             return Response(f'Ошибка сохранения данных пользователя: {ser.errors}', status=status.HTTP_400_BAD_REQUEST)
         
         return Response(ser.data)
-# PROVERKA
+
 class UsersAPIView(APIView):
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
@@ -563,7 +563,7 @@ class UsersAPIView(APIView):
 
         # Возвращаем ответ
         return paginator.get_paginated_response(serializer_data)
-# ok
+
 class UserPeriodsAPIView(APIView):
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
@@ -585,14 +585,14 @@ class UserPeriodsAPIView(APIView):
         serializer.save(user=user)
         
         return self.get(request, pk)
-# ok
+
 @api_view(['GET'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])
 def check_correct_tab_number(request):
     count = CustomUser.objects.filter(Q(is_superuser=False, tab_number__isnull=True), Q(isChecked=True) | Q(manually_added=True)).count()
     return Response({'flag': count == 0}, status=status.HTTP_202_ACCEPTED)
-# ok
+
 @api_view(['PUT'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])
@@ -601,7 +601,7 @@ def take_to_work(request):
     data = request.data['list_ids']
     Vacations.objects.filter(id__in=data).update(responsible=user)
     return Response(status=status.HTTP_200_OK)
-# ok
+
 @api_view(['POST'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])
@@ -636,7 +636,7 @@ def upload_tab_number(request):
     except Exception as e:
         print(f"Error processing file: {e}")
         return Response("Не верный формат файла", status=status.HTTP_409_CONFLICT)
-# PROVERKA
+
 @api_view(['GET'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])
@@ -677,7 +677,7 @@ def load_plan(request):
             {'error': str(e)}, 
             status=status.HTTP_400_BAD_REQUEST
         )
-# PROVERKA
+
 @api_view(['POST'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])

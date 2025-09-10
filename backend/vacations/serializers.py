@@ -59,7 +59,7 @@ class CustomUserSerializer(serializers.ModelSerializer):
         ]
         depth = 1
 
-    def get_nearest_date(self, obj):
+    def get_date_nearest(self, obj):
         vacation = Vacations.objects.filter(user=obj.id, is_archive=False, is_transfered=False).order_by('date_start').first()
         return vacation.date_start.strftime('%d.%m.%Y') if vacation else None
 
