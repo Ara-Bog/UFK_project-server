@@ -35,7 +35,7 @@ class Command(BaseCommand):
         queryset = NotifyTask.objects.all().exclude(date_last_update=current_date)
 
         expired_count = NotifyTask.objects.filter(date_finish__lt=current_date).delete()[0]
-        self.stdout.write(self.style.SUCCESS(f'{msg_out}. Удалено просроченных: {expired_count}'))
+        self.stdout.write(self.style.SUCCESS(f'Удалено просроченных: {expired_count}'))
         
         result = []
         for task in queryset:

@@ -17,7 +17,7 @@ from django.db.models import Q, Prefetch, Min
 from django.db import transaction
 from Auth_LDAP.models import CustomUser
 from rest_framework.authentication import TokenAuthentication
-from mui_table_settings import filter_queryset, CustomPagination
+from mui_table_settings import filter_queryset, CustomPagination, get_ordering_field
 from consts import MIME_TYPES
 from urllib.parse import quote
 from Auth_LDAP.views import generate_document_content
@@ -122,7 +122,7 @@ class UserSettingsAPIView(APIView):
     def post(self, request):
         user = request.user
         data = request.data
-
+        
         try:
             settings = UserSettings.objects.get(user=user)
         except UserSettings.DoesNotExist:
@@ -156,7 +156,10 @@ class ListVacationsAPIView(APIView):
         sort_by = request.GET.get('sortBy', None)
         sort_type = request.GET.get('sortType', 'asc')
         if sort_by:
-            queryset = queryset.order_by(f'-{sort_by}' if sort_type == 'desc' else sort_by)
+            ordering_field = get_ordering_field(queryset.model, sort_by)
+            if sort_type == 'desc':
+                ordering_field = f'-{ordering_field}'
+            queryset = queryset.order_by(ordering_field)
 
         # Пагинация
         paginator = CustomPagination()
@@ -550,9 +553,12 @@ class UsersAPIView(APIView):
         # Применяем фильтры
         users_query = filter_queryset(users_query, filters)
 
-        # Применяем сортировку
+
         if sort_by:
-            users_query = users_query.order_by(f'-{sort_by}' if sort_type == 'desc' else sort_by)
+            ordering_field = get_ordering_field(users_query.model, sort_by)
+            if sort_type == 'desc':
+                ordering_field = f'-{ordering_field}'
+            users_query = users_query.order_by(ordering_field)
 
         # Пагинация
         paginator = CustomPagination()

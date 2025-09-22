@@ -1,64 +1,8 @@
 from Auth_LDAP.models import CustomUser
-from datetime import datetime, timedelta
+from datetime import datetime
 from rest_framework.pagination import PageNumberPagination
-from django.db.models import Q, F, ExpressionWrapper, Subquery, OuterRef, When, Prefetch
+from django.db.models import Q
 
-# FILTER_OPERATIONS = {
-#     'equals': lambda q, f, v: q.filter(**{f: v}),
-#     'notEquals': lambda q, f, v: q.exclude(**{f: v}),
-#     'contains': lambda q, f, v: q.filter(**{f + '__icontains': v}),
-#     'doesNotContain': lambda q, f, v: q.exclude(**{f + '__icontains': v}),
-#     'startsWith': lambda q, f, v: q.filter(**{f + '__istartswith': v}),
-#     'endsWith': lambda q, f, v: q.filter(**{f + '__iendswith': v}),
-#     'greaterThan': lambda q, f, v: q.filter(**{f + '__gt': v}),
-#     'greaterThanOrEqual': lambda q, f, v: q.filter(**{f + '__gte': v}),
-#     'lessThan': lambda q, f, v: q.filter(**{f + '__lt': v}),
-#     'lessThanOrEqual': lambda q, f, v: q.filter(**{f + '__lte': v}),
-#     'isEmpty': lambda q, f, v: q.filter(**{f + '__isnull': True}),
-#     'isNotEmpty': lambda q, f, v: q.exclude(**{f + '__isnull': True}),
-    
-#     # Для числовых значений
-#     '=': lambda q, f, v: q.filter(**{f: v}),
-#     '>': lambda q, f, v: q.filter(**{f + '__gt': v}),
-#     '<': lambda q, f, v: q.filter(**{f + '__lt': v}),
-#     '>=': lambda q, f, v: q.filter(**{f + '__gte': v}),
-#     '<=': lambda q, f, v: q.filter(**{f + '__lte': v}),
-    
-#     # Для дат
-#     'is': lambda q, f, v: q.filter(**{f: v}),
-#     'not': lambda q, f, v: q.exclude(**{f: v}),
-#     'after': lambda q, f, v: q.filter(**{f + '__gt': v}),
-#     'before': lambda q, f, v: q.filter(**{f + '__lt': v}),
-#     'onOrAfter': lambda q, f, v: q.filter(**{f + '__gte': v}),
-#     'onOrBefore': lambda q, f, v: q.filter(**{f + '__lte': v}),
-# }
-
-# def filter_queryset(queryset, filters): 
-#     if not queryset.exists():
-#         return queryset
-#     user_field = 'user' if 'user' in list(queryset.values().first().keys()) else 'id'
-
-#     for filter in filters:
-#         field = filter.get('field')
-#         value = filter.get('value')
-#         operator = filter.get('operator')
-
-#         if field:
-#             if field in ['user', 'responsible']:
-#                 sub_query = list(FILTER_OPERATIONS[operator](CustomUser.objects, 'name', value).values_list('id', flat=True))
-#                 queryset = queryset.filter(**{f'{field}__in':sub_query})
-#             elif field in ['department']:
-#                 sub_query = list(FILTER_OPERATIONS[operator](CustomUser.objects.using('auth_db'), 'department__name', value).values_list('id', flat=True))
-#                 queryset = queryset.filter(**{f'{user_field}__in': sub_query})
-#             elif field in ['job']:
-#                 sub_query = list(FILTER_OPERATIONS[operator](CustomUser.objects.using('auth_db'), 'job__name', value).values_list('id', flat=True))
-#                 queryset = queryset.filter(**{f'{user_field}__in': sub_query})
-#             elif field in ['date_start', 'date_control', 'date_nearest']:
-#                 date_value = datetime.strptime(value, '%Y-%m-%dT%H:%M:%S.%fZ').date()
-#                 queryset = FILTER_OPERATIONS[operator](queryset, field, date_value)
-#             elif operator in FILTER_OPERATIONS:
-#                 queryset = FILTER_OPERATIONS[operator](queryset, field, value)
-#     return queryset
 
 def filter_queryset(queryset, filters):
     if not queryset.exists():
@@ -97,6 +41,15 @@ def filter_queryset(queryset, filters):
     
     return queryset.filter(q_objects)
 
+def get_ordering_field(model, field_name):
+    is_user = model == CustomUser 
+    if field_name in ['user', 'responsible']:
+        return f'{field_name}__name'
+    elif field_name in ['department', 'job']:
+        prefix = '' if is_user else 'user__'
+        return f'{prefix}{field_name}__name'
+    else:
+        return field_name
 
 def create_q_condition(field, operator, value):
     """

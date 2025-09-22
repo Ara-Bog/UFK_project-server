@@ -15,7 +15,7 @@ from django.db.models import Max
 import os
 import io
 from openpyxl.styles import Font, Border, PatternFill, Alignment, Protection
-from mui_table_settings import filter_queryset, CustomPagination
+from mui_table_settings import filter_queryset, CustomPagination, get_ordering_field
 
 def copy_row(sheet, row_to_copy):
     # Вставляем новую строку выше текущей
@@ -92,8 +92,12 @@ class CourtsListAPI(APIView):
         # Сортировка
         sort_by = request.GET.get('sortBy', None)
         sort_type = request.GET.get('sortType', 'asc')
+
         if sort_by:
-            queryset = queryset.order_by(f'-{sort_by}' if sort_type == 'desc' else sort_by)
+            ordering_field = get_ordering_field(queryset.model, sort_by)
+            if sort_type == 'desc':
+                ordering_field = f'-{ordering_field}'
+            users_query = queryset.order_by(ordering_field)
 
         # Пагинация
         paginator = CustomPagination()
@@ -238,9 +242,12 @@ class NotifiesAPI(APIView):
         # Сортировка
         sort_by = request.GET.get('sortBy', None)
         sort_type = request.GET.get('sortType', 'asc')
-        if sort_by:
-            queryset = queryset.order_by(f'-{sort_by}' if sort_type == 'desc' else sort_by)
 
+        if sort_by:
+            ordering_field = get_ordering_field(queryset.model, sort_by)
+            if sort_type == 'desc':
+                ordering_field = f'-{ordering_field}'
+            queryset = queryset.order_by(ordering_field)
         # queryset
 
         # Пагинация

@@ -5,7 +5,8 @@ ENV PYTHONUNBUFFERED=1
 WORKDIR /Auth_LDAP_code
 
 COPY requirements.txt /Auth_LDAP_code/
-RUN apt-get update && apt-get install -y \
+RUN sed -i 's|http://deb.debian.org|http://ftp.ru.debian.org|g' /etc/apt/sources.list && \
+    apt-get update && apt-get install -y \
     build-essential \
     libssl-dev \
     libffi-dev \
