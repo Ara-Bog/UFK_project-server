@@ -5,12 +5,10 @@ from django.http import HttpResponse
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.authentication import TokenAuthentication
 from .models import *
-from django.db.models import Q, Prefetch, Subquery, OuterRef
+from django.db.models import Q, Max
 from .serializers import *
 from django.contrib.postgres.search import SearchRank, SearchQuery, SearchVector
 from openpyxl import load_workbook
-import os
-from django.conf import settings
 import io
 import datetime
 
@@ -67,66 +65,88 @@ def departmentInfo(request, pk):
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])
 def userInfo(request, pk):
-    user_data = CustomUser.objects.select_related('job', 'department').get(id=pk)
-    
-    # Получаем все необходимые данные с аннотациями
-    systems_with_data = Systems.objects.filter(
-        userroles__user=pk
-    ).prefetch_related(
-        Prefetch(
-            'userroles_set',
-            queryset=UserRoles.objects.filter(user=pk).select_related('role'),
-            to_attr='user_roles'
+    try:
+        user_data = UserSerializer(CustomUser.objects.get(id=pk)).data
+        user_roles_data = UserRoles.objects.filter(
+            user=pk, isChecked=True
+        ).select_related('role', 'system', 'system__parent').values(
+            'system_id', 'system__name', 'system__parent_id',
+            'role__name', 'role_id'
         )
-    ).annotate(
-        last_update=Subquery(
-            LogUpdates.objects.filter(
-                system=OuterRef('id'), 
-                user=pk
-            ).order_by('-date_msg').values('date_msg')[:1]
-        )
-    ).distinct()
-    
-    # Группируем системы
-    parent_systems = systems_with_data.filter(parent__isnull=True)
-    child_systems = systems_with_data.filter(parent__isnull=False)
-    
-    # Формируем ответ
-    out_data = []
-    for parent in parent_systems:
-        parent_data = {
-            'id': parent.id,
-            'name': parent.name,
-            'parent': parent.parent_id,
-            'roles': RolesSerializer([ur.role for ur in parent.user_roles], many=True).data,
-            'last_update': parent.last_update,
-            'subsystems': []
-        }
         
-        # Добавляем дочерние системы
-        for child in child_systems.filter(parent=parent):
-            child_data = {
-                'id': child.id,
-                'name': child.name,
-                'parent': child.parent_id,
-                'roles': RolesSerializer([ur.role for ur in child.user_roles], many=True).data,
-                'last_update': child.last_update
-            }
-            parent_data['subsystems'].append(child_data)
+        if not user_roles_data:
+            return Response({
+                'roles': [],
+                'user': user_data
+            })
+        
+        updates_data = LogUpdates.objects.filter(user=pk).values(
+            'system_id'
+        ).annotate(
+            last_update=Max('date_msg')
+        ).values('system_id', 'last_update')
+        
+        updates_dict = {item['system_id']: item['last_update'] for item in updates_data}
+        
+        systems_dict = {}
+        for item in user_roles_data:
+            system_id = item['system_id']
+            system_name = item['system__name']
+            parent_id = item['system__parent_id']
+            role_name = item['role__name']
             
-            # Обновляем last_update родителя
-            if child.last_update and (
-                not parent_data['last_update'] or 
-                child.last_update > parent_data['last_update']
-            ):
-                parent_data['last_update'] = child.last_update
+            if parent_id is None:
+                if system_id not in systems_dict:
+                    systems_dict[system_id] = {
+                        'id': system_id,
+                        'name': system_name,
+                        'roles': [],
+                        'subsystems': [],
+                        'last_update': updates_dict.get(system_id)
+                    }
+                systems_dict[system_id]['roles'].append({'name': role_name})
+            else:
+                if system_id not in systems_dict:
+                    systems_dict[system_id] = {
+                        'id': system_id,
+                        'name': system_name,
+                        'parent_id': parent_id,
+                        'roles': [],
+                        'last_update': updates_dict.get(system_id),
+                        'is_subsystem': True
+                    }
+                systems_dict[system_id]['roles'].append({'name': role_name})
+                
+                if parent_id not in systems_dict:
+                    parent_system = Systems.objects.filter(id=parent_id).values('id', 'name').first()
+                    if parent_system:
+                        systems_dict[parent_id] = {
+                            'id': parent_id,
+                            'name': parent_system['name'],
+                            'roles': [],
+                            'subsystems': [],
+                            'last_update': updates_dict.get(parent_id)
+                        }
         
-        out_data.append(parent_data)
-    
-    return Response(data={
-        'roles': out_data,
-        'user': UserSerializer(user_data).data
-    }, status=status.HTTP_200_OK)
+        result = []
+        for system in systems_dict.values():
+            if system.get('is_subsystem'):
+                parent_id = system['parent_id']
+                if parent_id in systems_dict:
+                    subsystem_data = system.copy()
+                    del subsystem_data['is_subsystem']
+                    del subsystem_data['parent_id']
+                    systems_dict[parent_id]['subsystems'].append(subsystem_data)
+            else:
+                result.append(system)
+        
+        return Response({
+            'roles': result,
+            'user': user_data
+        })
+        
+    except Exception as e:
+        return Response(str(e), status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET'])
 @authentication_classes([TokenAuthentication])
@@ -140,26 +160,33 @@ def rolesUserToExcel(request, pk):
         wb = load_workbook(excel_data, read_only=False)
         ws = wb["Данные"]
 
-        user_data = CustomUser.objects.get(id=pk)
-        roles_queryset = UserRoles.objects.filter(user=pk).order_by('system')
+        user_data = CustomUser.objects.select_related('department', 'job').get(id=pk)
+        roles_queryset = UserRoles.objects.filter(
+            user=pk, 
+            isChecked=True 
+        ).select_related(
+            'system', 'system__parent', 'role' 
+        ).order_by('system__parent__name', 'system__name')
 
-        ws['B3'] = user_data.department.name
+        ws['B3'] = user_data.department.name if user_data.department else ''
         ws['B4'] = user_data.name
-        ws['B5'] = user_data.job.name
+        ws['B5'] = user_data.job.name if user_data.job else ''
         ws['B6'] = datetime.datetime.now().strftime("%d.%m.%Y")
 
         cur_system = None
         cur_subsystem = None
+        
         for i, user_role in enumerate(roles_queryset):
             cur_row = 9 + i
 
-            select_system = user_role.system.parent.name if user_role.role.system.parent else user_role.role.system.name
-            select_subsystem = user_role.role.system.name if user_role.role.system.parent else None
+            select_system = user_role.system.parent.name if user_role.system.parent else user_role.system.name
+            select_subsystem = user_role.system.name if user_role.system.parent else None
 
             if cur_system != select_system:
                 ws[f'A{cur_row}'] = select_system
                 ws[f'B{cur_row}'] = select_subsystem
                 cur_system = select_system
+                cur_subsystem = select_subsystem
             elif cur_subsystem != select_subsystem:
                 ws[f'B{cur_row}'] = select_subsystem
                 cur_subsystem = select_subsystem
@@ -167,16 +194,13 @@ def rolesUserToExcel(request, pk):
             ws[f'E{cur_row}'] = user_role.role.name
             
             if i:
-                ws.merge_cells.ranges.add(f'B{cur_row}:D{cur_row}')
-                ws.merge_cells.ranges.add(f'E{cur_row}:H{cur_row}')
-            ws[f'A{cur_row}']._style = ws['A9']._style
-            ws[f'B{cur_row}']._style = ws['A9']._style
-            ws[f'C{cur_row}']._style = ws['A9']._style
-            ws[f'D{cur_row}']._style = ws['A9']._style
-            ws[f'E{cur_row}']._style = ws['A9']._style
-            ws[f'F{cur_row}']._style = ws['A9']._style
-            ws[f'G{cur_row}']._style = ws['A9']._style
-            ws[f'H{cur_row}']._style = ws['A9']._style
+                ws.merge_cells(f'B{cur_row}:D{cur_row}')
+                ws.merge_cells(f'E{cur_row}:H{cur_row}')
+            
+            for col in ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H']:
+                cell = ws[f'{col}{cur_row}']
+                if ws['A9']._style:
+                    cell._style = ws['A9']._style
 
         output = io.BytesIO()
         wb.save(output)
@@ -185,6 +209,8 @@ def rolesUserToExcel(request, pk):
         response['Content-Disposition'] = 'attachment; filename="Данные по сотруднику.xlsx"'
         return response
 
+    except DocTemplate.DoesNotExist:
+        return Response("Шаблон не найден", status=status.HTTP_404_NOT_FOUND)
     except Exception as e:
         print(f"Error processing template file: {e}")
         return Response("Ошибка в формировании файла", status=status.HTTP_409_CONFLICT)
@@ -203,31 +229,47 @@ def rolesDepartmentToExcel(request, pk):
         ws = wb["Данные"]
         table = ws.tables['Main']
 
-        users_queryset = CustomUser .objects.filter(department=pk)
-        roles_queryset = UserRoles.objects.filter(user__in=list(users_queryset.values_list('id', flat=True)))
+        users_queryset = CustomUser.objects.filter(department=pk)
+        roles_queryset = UserRoles.objects.filter(
+            user__in=users_queryset.values_list('id', flat=True),
+            isChecked=True  
+        ).select_related('user', 'system', 'system__parent', 'role')
 
-        ws['A1'] = Departments.objects.get(id=pk).name
+        department_name = Departments.objects.get(id=pk).name
+        ws['A1'] = department_name
+
+        if ws.max_row > 2:
+            ws.delete_rows(3, ws.max_row - 2)
 
         for user_role in roles_queryset:
-            parent = user_role.role.system.parent
-            main_system = parent.name if parent else user_role.role.system.name
+            parent = user_role.system.parent  
+            main_system = parent.name if parent else user_role.system.name
+            subsystem = user_role.system.name if parent else None
 
             ws.append([
-                users_queryset.get(id=user_role.user).name,
+                user_role.user.name, 
                 main_system,
-                user_role.role.name if parent else None,
-                user_role.role.name,
+                subsystem,  
+                user_role.role.name,  
             ])
-        ws.delete_rows(3)
-        table.ref = "A2:D" + str(ws.max_row)
+
+        if ws.max_row >= 3:
+            table.ref = f"A2:D{ws.max_row}"
+        else:
+            ws.append(["", "", "", ""])
+            table.ref = "A2:D3"
             
         output = io.BytesIO()
         wb.save(output)
         output.seek(0)
         response = HttpResponse(output, content_type='application/vnd.ms-excel.sheet.macroEnabled.12')
-        response['Content-Disposition'] = 'attachment; filename="Данные по отделу.xlsx"'
+        response['Content-Disposition'] = f'attachment; filename="Данные по отделу {department_name}.xlsx"'
         return response
 
+    except DocTemplate.DoesNotExist:
+        return Response("Шаблон не найден", status=status.HTTP_404_NOT_FOUND)
+    except Departments.DoesNotExist:
+        return Response("Отдел не найден", status=status.HTTP_404_NOT_FOUND)
     except Exception as e:
         print(f"Error processing template file: {e}")
         return Response("Ошибка в формировании файла", status=status.HTTP_409_CONFLICT)

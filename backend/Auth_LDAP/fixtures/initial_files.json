@@ -7,7 +7,7 @@
       "name_visible": "Роли пользователей отдела",
       "description": "Excel таблица полномочий сотрудников отдела",
       "system": "MATRIX",
-      "file": "MATRIX_TEMPLATE_department.xlsx",
+      "file": "MATRIX_TEMPLATE_DEPARTMENT.xlsx",
       "created_at": "2025-10-09T12:00:00Z",
       "updated_at": "2025-10-09T12:00:00Z"
     }
