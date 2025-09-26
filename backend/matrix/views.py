@@ -93,7 +93,11 @@ def userInfo(request, pk):
             system_id = item['system_id']
             system_name = item['system__name']
             parent_id = item['system__parent_id']
-            role_name = item['role__name']
+
+            role_data = {
+                'id': item['id'],
+                'name': item['role__name']
+            }
             
             if parent_id is None:
                 if system_id not in systems_dict:
@@ -104,7 +108,7 @@ def userInfo(request, pk):
                         'subsystems': [],
                         'last_update': updates_dict.get(system_id)
                     }
-                systems_dict[system_id]['roles'].append({'name': role_name})
+                systems_dict[system_id]['roles'].append(role_data)
             else:
                 if system_id not in systems_dict:
                     systems_dict[system_id] = {
@@ -115,7 +119,7 @@ def userInfo(request, pk):
                         'last_update': updates_dict.get(system_id),
                         'is_subsystem': True
                     }
-                systems_dict[system_id]['roles'].append({'name': role_name})
+                systems_dict[system_id]['roles'].append(role_data)
                 
                 if parent_id not in systems_dict:
                     parent_system = Systems.objects.filter(id=parent_id).values('id', 'name').first()
