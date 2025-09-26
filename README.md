@@ -62,7 +62,7 @@
 
 Клиентские приложения реализованы на React и находятся в отдельном репозитории:
 
-[**⚛️ React Frontend Repository**](https://github.com/Ara-Bog/LdapAuth-frontend)
+[**⚛️ React Frontend Repository**](https://github.com/Ara-Bog/UFK_project-frontend)
 
 > Включает интерфейсы для всех систем: vacations, court_cases и matrix
 
