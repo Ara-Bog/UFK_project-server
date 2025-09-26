@@ -81,8 +81,12 @@ class PeriodsSerializer(serializers.ModelSerializer):
         
 
 class BaseVacationSerializer(serializers.ModelSerializer):
-    user = serializers.PrimaryKeyRelatedField( 
-        queryset=CustomUser.objects.all()
+    responsible_id = serializers.PrimaryKeyRelatedField(
+        source='responsible',  # указываем, что это источник для поля responsible
+        queryset=CustomUser.objects.all(),
+        required=False,
+        allow_null=True,
+        write_only=True  # только для записи
     )
     date_start = serializers.DateField(
         input_formats=['%d.%m.%Y', 'iso-8601'], format='%d.%m.%Y')
@@ -106,7 +110,7 @@ class BaseVacationSerializer(serializers.ModelSerializer):
     def update(self, instance, validated_data):
         # Получаем текущего пользователя из контекста
         user = self.context['request'].user
-        
+
         # Создаем словарь измененных полей
         changed_fields = {}
         
@@ -157,23 +161,7 @@ class BaseVacationSerializer(serializers.ModelSerializer):
         
         return instance
 
-    def to_representation(self, instance):
-        representation = super().to_representation(instance)
-        representation['responsible'] = CustomUserSerializer(instance.responsible).data if instance.responsible else None
-        representation['user'] = CustomUserSerializer(instance.user).data
-        
-        return representation
     
-class VacationListSerializer(BaseVacationSerializer):
-    class Meta(BaseVacationSerializer.Meta):
-        pass
-
-    def to_representation(self, instance):
-        representation = super().to_representation(instance)
-        representation['department'] = CustomUserSerializer(instance.user).data['department']
-        
-        return representation
-
 class VacationSerializer(BaseVacationSerializer):
     edv_control = serializers.SerializerMethodField()
     mat_control = serializers.SerializerMethodField()
@@ -201,6 +189,16 @@ class VacationSerializer(BaseVacationSerializer):
         elif obj.add_vacations.exists():
             return obj.add_vacations.first().id
         return None  # Если транзакций нет вообще
+
+class VacationListSerializer(BaseVacationSerializer):
+    class Meta(BaseVacationSerializer.Meta):
+        pass
+
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        representation['department'] = CustomUserSerializer(instance.user).data['department']
+        
+        return representation
 
 class TransfersSerializer(serializers.ModelSerializer):
     vacations_drop = VacationSerializer(many=True)

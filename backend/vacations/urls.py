@@ -13,6 +13,7 @@ urlpatterns = [
     path('api/users/user-settings/', views.UserSettingsAPIView.as_view(), name='user_settings'),
     path('api/users', views.UsersAPIView.as_view(), name='list_users'),
     path('api/users/<int:pk>', views.UserPageAPIView.as_view(), name='page_user'),
+    path('api/users/<int:pk>/vacations', views.get_userifno_doc, name='user_infodoc'),
     path('api/templates/', views.FillVacationsAPIView.as_view(), name='templates'),
     path('api/transfer', views.TransferAPIView.as_view(), name='transactions_create'),
     path('api/transfer/<int:pk>', views.TransferAPIView.as_view(), name='transactions_deail'),

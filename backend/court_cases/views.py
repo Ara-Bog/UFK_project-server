@@ -75,7 +75,7 @@ class CourtsListAPI(APIView):
         user = request.user
         active = request.GET.get('active', False)
 
-        queryset = CourtCases.objects.filter(archive=active)
+        queryset = CourtCases.objects.filter(archive=active).order_by('-id')
         if not (user.chief_rule or user.is_admin):
             queryset = queryset.filter(user=user.id)
 
@@ -92,12 +92,11 @@ class CourtsListAPI(APIView):
         # Сортировка
         sort_by = request.GET.get('sortBy', None)
         sort_type = request.GET.get('sortType', 'asc')
-
         if sort_by:
             ordering_field = get_ordering_field(queryset.model, sort_by)
             if sort_type == 'desc':
                 ordering_field = f'-{ordering_field}'
-            users_query = queryset.order_by(ordering_field)
+            queryset = queryset.order_by(ordering_field)
 
         # Пагинация
         paginator = CustomPagination()
@@ -231,7 +230,7 @@ class NotifiesAPI(APIView):
     def get(self, request):
         user = request.user
         
-        queryset = NotifyTask.objects.filter(target=user.id)
+        queryset = NotifyTask.objects.filter(target=user.id).order_by('-id')
 
         # Фильтрация
         filters = request.GET.get('filters', None)
@@ -369,7 +368,7 @@ def load_excel(request):
                     defendant=row[4], 
                     category=row[5],
                     claim_summ=sum_claim, 
-                    user=user.id,
+                    user=user ,
                     name_court="Выгрузка из СКИАО",
                     is_loaded=True
                 )

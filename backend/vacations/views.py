@@ -144,7 +144,7 @@ class ListVacationsAPIView(APIView):
         period = UserSettings.objects.get(user=request.user).period
 
         # Начинаем формировать запрос
-        queryset = Vacations.objects.filter(is_archive=False, is_transfered=False, date_start__year=period)
+        queryset = Vacations.objects.filter(is_archive=False, is_transfered=False, date_start__year=period).order_by('-id')
 
         # Фильтрация
         filters = request.GET.get('filters', None)
@@ -168,7 +168,6 @@ class ListVacationsAPIView(APIView):
         serializer_data = VacationListSerializer(paginated_queryset, many=True).data
 
         return paginator.get_paginated_response(serializer_data)
-    
 
 class FillVacationsAPIView(APIView):
     authentication_classes = [TokenAuthentication]
@@ -354,11 +353,9 @@ class VacationAPIView(APIView):
         return Response(status=status.HTTP_200_OK)
 
     def put(self, request, pk):
-        user = request.user
         data = request.data
         vacation = Vacations.objects.get(id=pk)
-
-        data['user'] = data['user']['id']
+        data['responsible_id'] = data.get('responsible', {}).get('id', None)
         ser = VacationSerializer(vacation, data=data, partial=True,
         context={'request': request})
         if not ser.is_valid():
@@ -505,6 +502,21 @@ class TransferAPIView(APIView):
         serializer = TransfersSerializer(transaction_obj)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
+
+@api_view(['GET'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def get_userifno_doc(request, pk):
+    target = CustomUser.objects.get(id=pk)
+    serialize_data_user = CustomUserSerializer(target).data
+    period = UserSettings.objects.get(user=request.user).period
+    
+    vacations_query = Vacations.objects.filter(user=target, is_archive=False, is_transfered=False, date_start__year=period).order_by('date_start')
+    serialize_data_vacations = VacationSerializer(vacations_query, many=True).data
+
+    return Response({'user':serialize_data_user, 'vacations': serialize_data_vacations})
+
+
 class UserPageAPIView(APIView):
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
@@ -548,7 +560,7 @@ class UsersAPIView(APIView):
                 'uservacations_as_user__date_start',
                 filter=Q(uservacations_as_user__is_archive=False, uservacations_as_user__is_transfered=False)
             )
-        )
+        ).order_by('-id')
 
         # Применяем фильтры
         users_query = filter_queryset(users_query, filters)
@@ -588,7 +600,7 @@ class UserPeriodsAPIView(APIView):
         
         # Удаляем старые и создаем новые периоды
         PeriodsVacation.objects.filter(user=user).delete()
-        serializer.save(user=user)
+        serializer.save()
         
         return self.get(request, pk)
 

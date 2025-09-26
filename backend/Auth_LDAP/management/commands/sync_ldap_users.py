@@ -121,11 +121,12 @@ class Command(BaseCommand):
                         user.name_key = name_key
                         user_update = True
                     
-                    if not (user.RAD_name and user.DAT_name):
-                        parsed_name = morph.parse(user_data['givenName'][0].decode('utf-8') if user_data.get('givenName') else 'Иван')[0]
-                        user.DAT_name = self.__inflect_field(morph, name_str, 'datv', parsed_name.tag.gender).title()
+                    parsed_name = morph.parse(user_data['givenName'][0].decode('utf-8') if user_data.get('givenName') else 'Иван')[0]
+                    if not user.RAD_name:
                         user.RAD_name = self.__inflect_field(morph, name_str, 'gent', parsed_name.tag.gender).title()
-                    
+                    if not user.DAT_name:
+                        user.DAT_name = self.__inflect_field(morph, name_str, 'datv', parsed_name.tag.gender).title()
+
                     if user_create or user.job.unique != job_unique or user.job.sortBy != job_el.sortBy:
                         user_update = True
                         user.job = job_el
