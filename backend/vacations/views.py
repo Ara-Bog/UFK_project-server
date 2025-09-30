@@ -659,7 +659,8 @@ def upload_tab_number(request):
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])
 def load_plan(request):
-    vacations_data = Vacations.objects.filter(is_archive=False, is_transfered=False).select_related(
+    settings = UserSettingsReadSerializer(UserSettings.objects.get(user=request.user.id)).data
+    vacations_data = Vacations.objects.filter(is_archive=False, is_transfered=False, date_start__year=settings['period']).select_related(
         'user__department', 
         'user__job'
     ).order_by(
@@ -670,7 +671,6 @@ def load_plan(request):
     )
 
     serializer_data = VacationListSerializer(vacations_data, many=True).data
-    settings = UserSettingsReadSerializer(UserSettings.objects.get(user=request.user.id)).data
     try:
         result = generate_document_content(
             dataset={
