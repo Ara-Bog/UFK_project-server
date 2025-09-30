@@ -105,7 +105,7 @@ class BaseVacationSerializer(serializers.ModelSerializer):
         model = Vacations
         fields = '__all__'
         extra_fields = ['date_control']
-        depth = 1
+        depth = 2
 
     def update(self, instance, validated_data):
         # Получаем текущего пользователя из контекста
